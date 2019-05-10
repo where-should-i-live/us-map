@@ -1,11 +1,13 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Login from './components/Login/Login';
+import FavoritesBar from './components/Favorites/FavoritesBar';
 
 function App() {
   return (
     <div className="App">
-      <h1>Brittney</h1>
+      <Login />
+      <FavoritesBar />
     </div>
   );
 }
