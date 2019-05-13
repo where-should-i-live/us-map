@@ -2,7 +2,7 @@ CREATE TABLE users (
 	user_id serial NOT NULL,
 	user_name varchar(200) NOT NULL,
 	user_email varchar NOT NULL UNIQUE,
-	user_pic TEXT,
+	-- user_pic TEXT,
 	user_hash TEXT NOT NULL,
 	CONSTRAINT Users_pk PRIMARY KEY (user_id)
 );
