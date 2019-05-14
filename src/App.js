@@ -1,15 +1,28 @@
 import React from 'react';
 import './App.css';
+import {connect} from 'react-redux';
 import Login from './components/Login/Login';
+import FilterBar from './components/FilterBar/FilterBar';
+import Map from './components/Map/Map';
 import FavoritesBar from './components/Favorites/FavoritesBar';
 
-function App() {
+function App(props) {
   return (
-    <div className="App">
+    <div className="usmap">
       <Login />
-      <FavoritesBar />
+      {/* <FilterBar /> */}
+      <Map />
+      {props.user.user.isLoggedIn ? <FavoritesBar /> : null}
     </div>
   );
 }
 
-export default App;
+const mapState = reduxState => {
+  return {
+      user: reduxState.user,
+      favorites: reduxState.favorites,
+      county: reduxState.county
+  };
+};
+
+export default connect(mapState)(App);

@@ -9,11 +9,12 @@ function FavoritesCard(props) {
     
     const {county} = props;
     const {favorite_id, favorite_county_name, favorite_county_state_name, favorite_note} = county;
+    const {county_name, county_state_name, household_income, property_value, commute_time, median_age} = props.county;
 
     return (
-        <div>
-            {favorite_county_name}
-            {favorite_county_state_name}
+        <div className='favorites-card'>
+            {county_name}
+            {county_state_name}
             {edit ? <textarea  value={noteInput}
                             onChange={e => setNoteInput(e.target.value)}
                             onKeyPress={(event) => {
