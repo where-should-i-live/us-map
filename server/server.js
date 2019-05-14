@@ -6,6 +6,7 @@ const app = express();
 
 const authController = require('./controllers/authController');
 const favoritesController = require('./controllers/favoritesController');
+const dataController = require('./controllers/dataController');
 
 const {SERVER_PORT, SESSION_SECRET, CONNECTION_STRING} = process.env;
 
@@ -30,6 +31,7 @@ app.post('/auth/register', authController.registerUser);
 app.post('/auth/login', authController.loginUser);
 app.get('/auth/logout', authController.logoutUser);
 app.get('/user', authController.getUser);
+app.get('/data', dataController.getCountyData);
 app.get('/favorites/:id', favoritesController.getFavorites);
 app.delete('/favorites/:id', favoritesController.deleteFavorite);
 app.put('/favorites/:id', favoritesController.editNote);

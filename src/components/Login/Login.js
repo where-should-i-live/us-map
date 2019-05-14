@@ -27,13 +27,13 @@ function Login(props) {
     }
 
     return (
-        <div>
-            <input placeholder='username' value={user_name} onChange={e => setUserName(e.target.value)}/>
-            <input placeholder='email' value={user_email} onChange={e => setUserEmail(e.target.value)}/>
-            <input placeholder='password' value={password} onChange={e => setPassword(e.target.value)}/>
-            <button onClick={() => login()}>Login</button>
-            <button onClick={() => newUser()}>Register</button>
-            <button onClick={() => props.logoutUser()}>Logout</button>
+        <div className='login'>
+            <input className='login-input' placeholder='name' value={user_name} onChange={e => setUserName(e.target.value)}/>
+            <input className='login-input' placeholder='email' value={user_email} onChange={e => setUserEmail(e.target.value)}/>
+            <input className='login-input' placeholder='password' value={password} onChange={e => setPassword(e.target.value)}/>
+            <button className='login-button' onClick={() => login()}>Login</button>
+            <button className='login-button' onClick={() => newUser()}>Register</button>
+            <button className='login-button' onClick={() => props.logoutUser()}>Logout</button>
         </div>
     );
 };
