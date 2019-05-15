@@ -17,7 +17,7 @@ class Map extends Component {
   }
 
   drawMap() {
-    console.log(this.props.county.countyData)
+    console.log(this.props.county.countyData);
     const geoPath = d3.geoPath();
     const svg = d3
       .select(".map")
@@ -71,7 +71,11 @@ class Map extends Component {
   }
 
   render() {
-    return <div className="map-container" />;
+    return (
+      <div className="map-container">
+        <div className="map" />
+      </div>
+    );
   }
 }
 
