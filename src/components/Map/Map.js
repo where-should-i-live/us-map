@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { getCountyData } from "./../../ducks/countyReducer";
+import { getCountyData, getActiveCounty } from "./../../ducks/countyReducer";
 import * as d3 from "d3";
 import * as topojson from "topojson-client";
 import axios from "axios";
@@ -13,7 +13,7 @@ class Map extends Component {
 
   componentDidMount() {
     this.drawMap();
-  }
+  };
 
   drawMap() {
     const geoPath = d3.geoPath();
@@ -113,5 +113,5 @@ const mapState = reduxState => {
 
 export default connect(
   mapState,
-  { getCountyData }
+  { getCountyData, getActiveCounty }
 )(Map);
