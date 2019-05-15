@@ -1,5 +1,5 @@
 import React from 'react';
-import './App.css';
+import './App.scss';
 import {connect} from 'react-redux';
 import Login from './components/Login/Login';
 import FilterBar from './components/FilterBar/FilterBar';
