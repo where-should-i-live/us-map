@@ -7,24 +7,26 @@ function FavoritesCard(props) {
     const [noteInput, setNoteInput] = useState(props.county.favorite_note);
     const [edit, setEdit] = useState(false); 
     
-    const {county} = props;
-    const {favorite_id, favorite_county_name, favorite_county_state_name, favorite_note} = county;
-    const {county_name, county_state_name, household_income, property_value, commute_time, median_age} = props.county;
+    const {favorite_id, county_name, county_state_name, household_income, property_value, commute_time, median_age, favorite_note} = props.county;
 
     return (
         <div className='favorites-card'>
-            {county_name}
-            {county_state_name}
+            <p>{county_name}</p>
+            <p>{county_state_name}</p>
+            <p>Median Household Income: ${household_income}</p>
+            <p>Median Property Value: ${property_value}</p>
+            <p>Average Commute Time: {commute_time} minutes</p>
+            <p>Median Age: {median_age} years</p>
             {edit ? <textarea  value={noteInput}
                             onChange={e => setNoteInput(e.target.value)}
                             onKeyPress={(event) => {
                                 if (event.key === 'Enter') {
-                                    props.editNote({...county, favorite_note: noteInput});
+                                    props.editNote({...props.county, favorite_note: noteInput});
                                     setEdit(!edit);
                                 }
                             }}/>
                 : <p onClick={() => setEdit(!edit)}>{favorite_note}</p>}
-            <button onClick={() => props.deleteFavorite(favorite_id)}>Delete</button>
+            <button onClick={() => props.deleteFavorite(favorite_id)}>Remove</button>
         </div>
     );
 };

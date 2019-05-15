@@ -6,7 +6,7 @@ module.exports = {
         const {user_name, user_email, password} = req.body;
         let potentialUser = await db.get_user_by_email(user_email);
         if (potentialUser[0]) {
-            return res.status(200).send({message: 'Email Already In Use'});
+            return res.status(200).send({message: 'This email is already in use. Please use a different email.'});
         }
 
         const salt = bcrypt.genSaltSync(10);
@@ -25,13 +25,13 @@ module.exports = {
         const userCheck = await db.get_user_by_email(user_email);
         const user = userCheck[0];
         if (!user) {
-            return res.status(200).send({message: 'Account Not Found'});
+            return res.status(200).send({message: 'This email account does not exist.'});
         }
 
         const passwordMatch = bcrypt.compareSync(password, user.user_hash);
 
         if (!passwordMatch) {
-            return res.status(401).send({message: 'Incorrect Password'});
+            return res.status(200).send({message: 'The password you entered is incorrect.'});
         }
 
         req.session.user = userCheck[0];

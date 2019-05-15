@@ -9,7 +9,7 @@ function FavoritesBar(props) {
     return (
         <div className='favoritesbar'>
         <div className='favorites-container'>
-            {props.county.countyData.map(favorite => {
+            {props.favorites.favorites.map(favorite => {
                 return <FavoritesCard key={favorite.favorite_id} county={favorite} />
             })}
         </div>
