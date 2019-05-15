@@ -20,7 +20,7 @@ class Map extends Component {
     console.log(this.props.county.countyData)
     const geoPath = d3.geoPath();
     const svg = d3
-      .select(".map-container")
+      .select(".map")
       .append("svg")
       .attr("width", 960)
       .attr("height", 600);

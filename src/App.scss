@@ -1,6 +1,7 @@
 .usmap {
   display: flex;
   flex-direction: column;
+<<<<<<< HEAD:src/App.scss
 }
 
 .counties {
@@ -36,6 +37,8 @@
   stroke-linejoin: round;
   stroke-linecap: round;
   pointer-events: none;
+=======
+>>>>>>> master:src/App.css
 }
 
 .login {
@@ -47,13 +50,27 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  padding: 10px;
+  box-sizing: border-box;
 }
 
 .login-input {
   height: 30px;
 }
 
+<<<<<<< HEAD:src/App.scss
 .login-button {
+=======
+.cancel-button {
+  align-self: flex-start;
+  border: none;
+  background: none;
+  color: white;
+}
+
+.cancel-button:focus {
+  outline: 0;
+>>>>>>> master:src/App.css
 }
 
 .filterbar-container {
@@ -68,14 +85,27 @@
 .map-container {
   width: 100%;
   height: 100vh;
+<<<<<<< HEAD:src/App.scss
   background: navy;
   display: flex;
   justify-content: center;
   align-items: center;
+=======
+  background: #53575a;
+}
+
+.map {
+  width: 98%;
+  margin: 0 auto;
+  height: 92%;
+  border: 1px solid black;
+  position: relative;
+  top: 55px;
+>>>>>>> master:src/App.css
 }
 
 .favoritesbar {
-  background: salmon;
+  background: rgb(233,233,233);
   height: 450px;
   display: flex;
   align-items: center;
@@ -96,9 +126,30 @@
 .favorites-card {
   height: 400px;
   width: 300px;
-  min-width: 200px;
+  min-width: 300px;
   border: 1px solid black;
   padding: 5px;
   box-sizing: border-box;
   margin: 0px 5px;
 }
+
+.swal-overlay {
+  background: none;
+}
+
+.swal-modal {
+  background: rgba(233,233,233,0.69);
+  position: fixed;
+  top: 30px;
+  right: 20px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.swall-text {
+  font-size: 12px;
+  color: white;
+}
+
