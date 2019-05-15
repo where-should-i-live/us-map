@@ -8,6 +8,9 @@ function Map(props) {
 
     return (
         <div className='map-container'>
+            <div className='map'>
+            
+            </div>
         </div>
     );
 };

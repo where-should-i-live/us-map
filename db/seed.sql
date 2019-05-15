@@ -3,19 +3,16 @@ CREATE TABLE users (
 	user_name varchar(200) NOT NULL,
 	user_email varchar NOT NULL UNIQUE,
 	user_hash TEXT NOT NULL,
-	CONSTRAINT Users_pk PRIMARY KEY (user_id)
+	CONSTRAINT users_pk PRIMARY KEY (user_id)
 );
 
 CREATE TABLE favorites (
 	favorite_id serial NOT NULL UNIQUE,
-	user_id integer NOT NULL,
-	favorite_county_name varchar(200),
-	favorite_county_state_name varchar(200),
+	user_id integer NOT NULL references users(user_id),
+	favorite_county_id integer NOT NULL references county(county_id),
 	favorite_note varchar(1000),
-	CONSTRAINT Favorites_pk PRIMARY KEY (favorite_id)
+	CONSTRAINT favorites_pk PRIMARY KEY (favorite_id)
 );
-
-ALTER TABLE favorites ADD CONSTRAINT favorites_fk0 FOREIGN KEY (user_id) REFERENCES users(user_id);
 
 CREATE TABLE county (
 	county_id integer NOT NULL UNIQUE,
@@ -25,28 +22,9 @@ CREATE TABLE county (
 	property_value integer,
 	commute_time numeric(5,2),
 	median_age numeric(4,2),
-	slug varchar(100)
+	slug varchar(100),
+	CONSTRAINT county_pk PRIMARY KEY (county_id)
 );
-
-
--- sample favorites values
-
--- INSERT INTO favorites (
---     user_id,
---     favorite_county_name,
---     favorite_county_state_name,
---     favorite_note
--- ) VALUES (
---     3,
---     'Salt Lake County',
---     'Utah',
---     'cool area, cheap rent'
--- ), (
---     3,
---     'Wasatch County',
---     'Utah',
---     'lots of farm land out here'
--- );
 
 INSERT INTO county (
 	county_id,
@@ -58,7 +36,6 @@ INSERT INTO county (
 	median_age,
 	slug
 ) VALUES 
-
 (1001, 'Autauga County',  'Alabama', 54487, 143000, 25.13, 37.8, 'autauga-county-al'), 
 (1003, 'Baldwin County',  'Alabama', 56460, 182000, 25.49, 42.6, 'baldwin-county-al'), 
 (1005, 'Barbour County',  'Alabama', 32884, 89300, 23.06, 39.7, 'barbour-county-al'), 
@@ -3191,4 +3168,3 @@ INSERT INTO county (
 (56041, 'Uinta County',  'Wyoming', 64713, 178400, 19.53, 35.1, 'uinta-county-wy'), 
 (56043, 'Washakie County',  'Wyoming', 49533, 165500, 13.71, 43.4, 'washakie-county-wy'), 
 (56045, 'Weston County',  'Wyoming', 56582, 180100, 23.94, 42.2, 'weston-county-wy');
-
