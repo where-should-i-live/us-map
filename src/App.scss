@@ -1,7 +1,6 @@
 .usmap {
   display: flex;
   flex-direction: column;
-<<<<<<< HEAD:src/App.scss
 }
 
 .counties {
@@ -37,8 +36,6 @@
   stroke-linejoin: round;
   stroke-linecap: round;
   pointer-events: none;
-=======
->>>>>>> master:src/App.css
 }
 
 .login {
@@ -58,19 +55,7 @@
   height: 30px;
 }
 
-<<<<<<< HEAD:src/App.scss
 .login-button {
-=======
-.cancel-button {
-  align-self: flex-start;
-  border: none;
-  background: none;
-  color: white;
-}
-
-.cancel-button:focus {
-  outline: 0;
->>>>>>> master:src/App.css
 }
 
 .filterbar-container {
@@ -85,23 +70,10 @@
 .map-container {
   width: 100%;
   height: 100vh;
-<<<<<<< HEAD:src/App.scss
   background: navy;
   display: flex;
   justify-content: center;
   align-items: center;
-=======
-  background: #53575a;
-}
-
-.map {
-  width: 98%;
-  margin: 0 auto;
-  height: 92%;
-  border: 1px solid black;
-  position: relative;
-  top: 55px;
->>>>>>> master:src/App.css
 }
 
 .favoritesbar {
