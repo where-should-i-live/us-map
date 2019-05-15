@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { getCountyData } from "./../../ducks/countyReducer";
+import { getCountyData, getActiveCounty } from "./../../ducks/countyReducer";
 import * as d3 from "d3";
 import * as topojson from "topojson-client";
 
@@ -14,7 +14,7 @@ class Map extends Component {
 
   componentDidMount() {
     this.drawMap();
-  }
+  };
 
   drawMap() {
     console.log(this.props.county.countyData);
@@ -25,7 +25,8 @@ class Map extends Component {
       .attr("width", 960)
       .attr("height", 600);
 
-    d3.json("https://d3js.org/us-10m.v1.json").then(function(usGeoData) {
+    d3.json("https://d3js.org/us-10m.v1.json").then(async function(usGeoData) {
+      
       const counties = svg
         .append("g")
         .attr("class", "counties")
@@ -89,5 +90,5 @@ const mapState = reduxState => {
 
 export default connect(
   mapState,
-  { getCountyData }
+  { getCountyData, getActiveCounty }
 )(Map);
