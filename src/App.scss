@@ -1,6 +1,7 @@
 .usmap {
   display: flex;
   flex-direction: column;
+  font-family: 'PT Sans', sans-serif;
 }
 
 .counties {
@@ -56,15 +57,17 @@
 }
 
 input {
-  width: 6.5em;
-  height: 15px;
+  // width: 6.5em;
+  width: 150px;
+  height: 10px;
   color: white;
-  font-size: inherit;
+  font-size: 14px;
   font-family: inherit;
   background-color: hsl(246, 41%, 18%);
   padding: 0.35em 0.45em;
   border: 1px solid transparent;
   transition: background-color 0.3s ease-in-out;
+  margin: 5px;
 }
 
 input:focus {
@@ -141,6 +144,14 @@ input:focus ~ .left {
   color: #3cefff;
   background: none;
   border: none;
+}
+
+.cancel-button:hover {
+  cursor: pointer;
+}
+
+.cancel-button:focus {
+  outline: 0;
 }
 
 .filterbar-container {
@@ -230,6 +241,19 @@ input:focus ~ .left {
   color: white;
   border: none;
   text-transform: uppercase;
+  font-family: 'PT Sans', sans-serif;
+  letter-spacing: .1em;
+  height: 20px;
+  width: 75px;
+  margin: 5px;
+}
+
+.login-button:focus {
+  outline: 0;
+}
+
+.login-button:hover {
+  cursor: pointer;
 }
 
 .login-button::before, .login-button::after {
@@ -238,12 +262,12 @@ input:focus ~ .left {
   left: 0;
   right: 0;
   height: 2px;
-  background-color: #fc2f70;
+  background-color: #3cefff;
   transform: scaleX(0);
   transition: transform 0.5s ease;
 }
 
-.login-buttonn::before {
+.login-button::before {
   top: 0;
   transform-origin: center right;
 }
@@ -261,5 +285,9 @@ input:focus ~ .left {
 .login-button:hover::after {
   transform-origin: center right;
   transform: scaleX(1);
+}
+
+.select-dataset {
+  font-family: 'PT Sans', sans-serif;
 }
 
