@@ -25,35 +25,52 @@ class Map extends Component {
       .attr("width", 960)
       .attr("height", 600);
 
+
+    const allDataConcat = topojson.feature(usGeoData, usGeoData.objects.counties).features
+    console.log(allDataConcat)
+
     function combineData() {
-      const { geometries } = usGeoData.objects.counties;
-      for (let i = 0; i < geometries.length; i++) {
+      for (let i = 0; i < allDataConcat.length; i++) {
         let value = countyData.find(
-          county => Number(county.county_id) === Number(geometries[i].id)
+          county => Number(county.county_id) === Number(allDataConcat[i].id)
         );
         if (value) {
-          geometries[i].county_name = value.county_name;
-          geometries[i].county_state_name = value.county_state_name;
-          geometries[i].household_income = value.household_income;
-          geometries[i].property_value = value.property_value;
-          geometries[i].commute_time = value.commute_time;
-          geometries[i].median_age = value.median_age;
-          geometries[i].slug = value.slug;
+          allDataConcat[i].county_name = value.county_name;
+          allDataConcat[i].county_state_name = value.county_state_name;
+          allDataConcat[i].household_income = value.household_income;
+          allDataConcat[i].property_value = value.property_value;
+          allDataConcat[i].commute_time = value.commute_time;
+          allDataConcat[i].median_age = value.median_age;
+          allDataConcat[i].slug = value.slug;
         }
       }
-      // console.log(geometries);
     }
     combineData();
+    // console.log(combineData());
+
+    // console.log(usGeoData)
+    // console.log(topojson.feature(usGeoData, usGeoData.objects.counties).features)
+
+
+    // console.log(usGeoData.objects.counties.geometries)
+    // console.log(topojson.feature(usGeoData, usGeoData.objects.counties).features)
+    console.log(allDataConcat)
 
     svg
       .append("g")
       .attr("class", "counties")
       .selectAll("path")
-      .data(topojson.feature(usGeoData, usGeoData.objects.counties).features)
+      .data(allDataConcat)
       .enter()
       .append("path")
       .attr("d", geoPath)
       .attr("id", d => d.id)
+      .attr("fill", function shader(d ) {
+        // console.log(d)
+        // shades = [1, 2, 3];
+
+        // return value
+      })
       .on("click", function(d) {
         mapContext.props.getActiveCounty(d.id);
       });
