@@ -47,8 +47,26 @@ function Login(props) {
         <div className='login'>
             {props.user.user.isLoggedIn ? <p style={{color: 'white'}}>{props.user.user.user_name}</p> : null}
             {(register) ? <input className='login-input' placeholder='name' value={user_name} onChange={e => setUserName(e.target.value)}/> : null}
-            {(login || register) ? <input className='login-input' placeholder='email' value={user_email} onChange={e => setUserEmail(e.target.value)}/> : null}
-            {(login || register) ? <input className='login-input' placeholder='password' value={password} onChange={e => setPassword(e.target.value)} onKeyPress={(e) => processUser(e)}/> : null}
+            {(login || register) ? 
+            // <input className='login-input' placeholder='email' value={user_email} onChange={e => setUserEmail(e.target.value)}/>
+                <div className='text-input'>
+                    <input type="text" placeholder="email" value={user_email} onChange={e => setUserEmail(e.target.value)}/>
+                    <span class="bottom"></span>
+                    <span class="right"></span>
+                    <span class="top"></span>
+                    <span class="left"></span>
+                </div>
+            : null}
+            {(login || register) ? 
+            // <input className='login-input' placeholder='password' value={password} onChange={e => setPassword(e.target.value)} onKeyPress={(e) => processUser(e)}/> 
+                <div className='text-input'>
+                    <input type="text" placeholder="password" value={password} onChange={e => setPassword(e.target.value)} onKeyPress={(e) => processUser(e)}/>
+                    <span class="bottom"></span>
+                    <span class="right"></span>
+                    <span class="top"></span>
+                    <span class="left"></span>
+                </div>
+            : null}
             {(login || register) ? <button className='cancel-button' onClick={() => {setUserName('');setPassword('');setUserEmail('');{(login) ? setLogin(!login) : setRegister(!register)}}}><FontAwesomeIcon icon='minus' /></button> : null}
             {(!props.user.user.isLoggedIn && !login && !register) ? <button className='login-button' onClick={() => setLogin(!login)}>Login</button> : null}
             {(!props.user.user.isLoggedIn && !login && !register) ? <button className='login-button' onClick={() => setRegister(!register)}>Register</button> : null}

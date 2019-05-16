@@ -8,12 +8,15 @@ import axios from "axios";
 class Map extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      countyId: ''
+    };
   }
 
   componentDidMount() {
     this.drawMap();
   };
+
 
   drawMap() {
     const geoPath = d3.geoPath();
@@ -42,7 +45,7 @@ class Map extends Component {
             geometries[i].slug = value.slug;
           }
         }
-        console.log(geometries);
+        // console.log(geometries);
       }
       combineData();
 
@@ -55,8 +58,7 @@ class Map extends Component {
         .append("path")
         .attr("d", geoPath)
         .attr("id", d => d.id)
-        .on("click", function(d) {
-          this.props.getActiveCounty(d.id);
+        .on("click", d => {
           console.log(d.id)
         });
 

@@ -26,7 +26,7 @@ function FavoritesCard(props) {
                                 }
                             }}/>
                 : <p onClick={() => setEdit(!edit)}>{favorite_note}</p>}
-            <button onClick={() => props.deleteFavorite(favorite_id)}>Remove</button>
+            <button className='login-button' onClick={() => props.deleteFavorite(favorite_id)}>Remove</button>
         </div>
     );
 };
