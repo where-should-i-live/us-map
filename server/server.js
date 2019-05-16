@@ -32,6 +32,7 @@ app.post('/auth/login', authController.loginUser);
 app.get('/auth/logout', authController.logoutUser);
 app.get('/user', authController.getUser);
 app.get('/data', dataController.getCountyData);
+app.get('/data/calc', dataController.standardDeviation);
 app.get('/data/:id', dataController.getActiveCounty);
 app.get('/favorites/:id', favoritesController.getFavorites);
 app.delete('/favorites/:id', favoritesController.deleteFavorite);

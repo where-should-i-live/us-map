@@ -6,7 +6,9 @@ import FilterBar from './components/FilterBar/FilterBar';
 import Map from './components/Map/Map';
 import FavoritesBar from './components/Favorites/FavoritesBar';
 
+
 function App(props) {
+
   return (
     <div className="usmap">
       <Login />

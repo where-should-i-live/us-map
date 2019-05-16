@@ -1,12 +1,20 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { getCountyData, getActiveCounty } from "./../../ducks/countyReducer";
+import { getCountyData, standardDeviation, getActiveCounty } from "./../../ducks/countyReducer";
 import * as d3 from "d3";
 import * as topojson from "topojson-client";
 
 class Map extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      dataset: 'household_income_stdev'
+    };
+  }
   async componentDidMount() {
     await this.props.getCountyData();
+    await this.props.standardDeviation();
     await this.drawMap();
   }
 
@@ -16,8 +24,6 @@ class Map extends Component {
     const usGeoData = await d3data.json();
     const countyData = await mapContext.props.county.countyData;
     const geoPath = d3.geoPath();
-    // console.log(usGeoData);
-    // console.log(countyData);
 
     const svg = d3
       .select(".map")
@@ -25,23 +31,24 @@ class Map extends Component {
       .attr("width", 960)
       .attr("height", 600);
 
+    const combinedData = topojson.feature(usGeoData, usGeoData.objects.counties).features;
+
+
     function combineData() {
-      const { geometries } = usGeoData.objects.counties;
-      for (let i = 0; i < geometries.length; i++) {
+      for (let i = 0; i < combinedData.length; i++) {
         let value = countyData.find(
-          county => Number(county.county_id) === Number(geometries[i].id)
+          county => Number(county.county_id) === Number(combinedData[i].id)
         );
         if (value) {
-          geometries[i].county_name = value.county_name;
-          geometries[i].county_state_name = value.county_state_name;
-          geometries[i].household_income = value.household_income;
-          geometries[i].property_value = value.property_value;
-          geometries[i].commute_time = value.commute_time;
-          geometries[i].median_age = value.median_age;
-          geometries[i].slug = value.slug;
+          combinedData[i].county_name = value.county_name;
+          combinedData[i].county_state_name = value.county_state_name;
+          combinedData[i].household_income = value.household_income;
+          combinedData[i].property_value = value.property_value;
+          combinedData[i].commute_time = value.commute_time;
+          combinedData[i].median_age = value.median_age;
+          combinedData[i].slug = value.slug;
         }
       }
-      // console.log(geometries);
     }
     combineData();
 
@@ -49,11 +56,20 @@ class Map extends Component {
       .append("g")
       .attr("class", "counties")
       .selectAll("path")
-      .data(topojson.feature(usGeoData, usGeoData.objects.counties).features)
+      .data(combinedData)
       .enter()
       .append("path")
       .attr("d", geoPath)
       .attr("id", d => d.id)
+      .attr("fill", function shader(d, val) {
+        let data = mapContext.state.dataset;
+        let stdev = mapContext.props.county.standardDeviation[data]
+        ////logic to set color ranges////
+        if ((val - stdev) < d.household_income) {
+          return '#3cefff';
+        } else {return 'white'}
+
+      })
       .on("click", function(d) {
         mapContext.props.getActiveCounty(d.id);
       });
@@ -91,6 +107,12 @@ class Map extends Component {
   render() {
     return (
       <div className="map-container">
+      <select className='select-dataset' onChange={e => this.setState({dataset: e.target.value})}>
+        <option value={this.props.county.standardDeviation.household_income_stdev}>Household Income</option>
+        <option value={this.props.county.standardDeviation.property_value_stdev}>Property Value</option>
+        <option value={this.props.county.standardDeviation.commute_time_stdev}>Commute Time</option>
+        <option value={this.props.county.standardDeviation.median_age_stdev}>Median Age</option>
+      </select>
         <div className="map" />
       </div>
     );
@@ -107,5 +129,5 @@ const mapState = reduxState => {
 
 export default connect(
   mapState,
-  { getCountyData, getActiveCounty }
+  { getCountyData, standardDeviation, getActiveCounty }
 )(Map);
