@@ -10,9 +10,9 @@ module.exports = {
     addFavorite: async (req, res) => {
         const db = req.app.get('db');
         const {user_id} = req.session.user;
-        const {favorite_county_name, favorite_county_state_name} = req.body;
+        const {id} = req.params;
 
-        let favorites = await db.add_favorite([user_id, favorite_county_name, favorite_county_state_name]);
+        let favorites = await db.add_favorite([user_id, id]);
         res.status(200).send(favorites);
     },
 

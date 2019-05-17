@@ -56,8 +56,16 @@
   position: relative;
 }
 
+textarea {
+  color: white;
+  font-family: 'PT Sans', sans-serif;
+}
+
+textarea:focus {
+  outline: 0;
+}
+
 input {
-  // width: 6.5em;
   width: 150px;
   height: 10px;
   color: white;
@@ -289,5 +297,19 @@ input:focus ~ .left {
 
 .select-dataset {
   font-family: 'PT Sans', sans-serif;
+}
+
+.favorite-note {
+  width: 98%;
+  height: 30%;
+  background: hsl(246, 41%, 18%);
+}
+
+.favorite-note:hover {
+  cursor: pointer;
+}
+
+.remove {
+  float:right;
 }
 

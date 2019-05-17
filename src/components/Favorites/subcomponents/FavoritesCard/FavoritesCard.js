@@ -17,7 +17,7 @@ function FavoritesCard(props) {
             <p>Median Property Value: ${property_value}</p>
             <p>Average Commute Time: {commute_time} minutes</p>
             <p>Median Age: {median_age} years</p>
-            {edit ? <textarea  value={noteInput}
+            {edit ? <textarea  className='favorite-note' value={noteInput}
                             onChange={e => setNoteInput(e.target.value)}
                             onKeyPress={(event) => {
                                 if (event.key === 'Enter') {
@@ -25,8 +25,8 @@ function FavoritesCard(props) {
                                     setEdit(!edit);
                                 }
                             }}/>
-                : <p onClick={() => setEdit(!edit)}>{favorite_note}</p>}
-            <button className='login-button' onClick={() => props.deleteFavorite(favorite_id)}>Remove</button>
+                : <div className='favorite-note' onClick={() => setEdit(!edit)}>{favorite_note}</div>}
+            <button className='login-button remove' onClick={() => props.deleteFavorite(favorite_id)}>Remove</button>
         </div>
     );
 };

@@ -36,6 +36,7 @@ app.get('/data/calc', dataController.standardDeviation);
 app.get('/data/:id', dataController.getActiveCounty);
 app.get('/favorites/:id', favoritesController.getFavorites);
 app.delete('/favorites/:id', favoritesController.deleteFavorite);
+app.post('/favorites/:id', favoritesController.addFavorite);
 app.put('/favorites/:id', favoritesController.editNote);
 
 
