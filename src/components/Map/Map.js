@@ -11,7 +11,8 @@ class Map extends Component {
     super(props);
 
     this.state = {
-      dataset: 'household_income_stdev'
+      dataset: 'household_income_stdev',
+      val: 60000
     };
   }
   async componentDidMount() {
@@ -63,13 +64,40 @@ class Map extends Component {
       .append("path")
       .attr("d", geoPath)
       .attr("id", d => d.id)
-      .attr("fill", function shader(d, val) {
+      .attr("fill", function shader(d) {
         let data = mapContext.state.dataset;
         let stdev = mapContext.props.county.standardDeviation[data]
         ////logic to set color ranges////
-        if ((val - stdev) < d.household_income) {
-          return '#3cefff';
-        } else {return 'white'}
+        const { val } = mapContext.state
+
+        const color8 = '#edfdff' 
+        const color7 = '#a6f7ff'
+        const color6 = '#71f3ff'
+        const color5 = '#3cefff'
+        const color4 = '#32c4d1'
+        const color3 = '#21838c'
+        const color2 = '#16575d'
+        const color1 = '#0b2c2f'
+
+        if ((val - stdev) < d.household_income && d.household_income < (val + stdev)) {
+          console.log(val)
+          return color1;
+        } else if ((val - 2 * stdev) < d.household_income && d.household_income < (val + 2 * stdev)) {
+          return color2;
+        } else if ((val - 3 * stdev) < d.household_income && d.household_income < (val + 3 * stdev)) {
+          return color3;
+        }else if ((val - 4 * stdev) < d.household_income && d.household_income < (val + 4 * stdev)) {
+          return color4;
+        }else if ((val - 5 * stdev) < d.household_income && d.household_income < (val + 5 * stdev)) {
+          return color5;
+        }else if ((val - 6 * stdev) < d.household_income && d.household_income < (val + 6 * stdev)) {
+          return color6;
+        }else if ((val - 7 * stdev) < d.household_income && d.household_income < (val + 7 * stdev)) {
+          return color7;
+        }else if ((val - 8 * stdev) < d.household_income && d.household_income < (val + 8 * stdev)) {
+          return color8;
+        } else {
+          return 'white'}
 
       })
       .on("click", function(d) {
@@ -109,6 +137,7 @@ class Map extends Component {
   render() {
     return (
       <div className="map-container">
+      <input onChange={(e) => this.setState({val: e.target.value})}/>
       <select className='select-dataset' onChange={e => this.setState({dataset: e.target.value})}>
         <option value={this.props.county.standardDeviation.household_income_stdev}>Household Income</option>
         <option value={this.props.county.standardDeviation.property_value_stdev}>Property Value</option>
