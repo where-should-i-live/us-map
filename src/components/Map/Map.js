@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import ActiveCounty from './subcomponents/ActiveCounty';
 import { getCountyData, standardDeviation, getActiveCounty } from "./../../ducks/countyReducer";
 import { addFavorite } from "./../../ducks/favoritesReducer";
 
@@ -12,7 +13,14 @@ class Map extends Component {
 
     this.state = {
       dataset: 'household_income_stdev',
-      val: 60000
+      hi: true,
+        hi_val: 60000,
+      pv: true,
+        pv_val: 217600,
+      age: true,
+        age_val: 38,
+      c: true,
+        c_val: 23  
     };
   }
   async componentDidMount() {
@@ -65,10 +73,9 @@ class Map extends Component {
       .attr("d", geoPath)
       .attr("id", d => d.id)
       .attr("fill", function shader(d) {
-        let data = mapContext.state.dataset;
-        let stdev = mapContext.props.county.standardDeviation[data]
         ////logic to set color ranges////
-        const { val } = mapContext.state
+        const { hi, hi_val, pv, pv_val, age, age_val, c, c_val } = mapContext.state
+        const {household_income_stdev, property_value_stdev, median_age_stdev, commute_time_stdev} = mapContext.props.county.standardDeviation;
 
         const color8 = '#edfdff' 
         const color7 = '#a6f7ff'
@@ -79,25 +86,81 @@ class Map extends Component {
         const color2 = '#16575d'
         const color1 = '#0b2c2f'
 
-        if ((val - stdev) < d.household_income && d.household_income < (val + stdev)) {
-          console.log(val)
+        let datasetArr = [{datatype: 'household_income', input: Number(hi_val), sd: Number(household_income_stdev), include: hi}, {datatype: 'property_value', input: Number(pv_val), sd: Number(property_value_stdev), include: pv}, {datatype: 'median_age', input: Number(age_val), sd: Number(median_age_stdev), include: age}, {datatype: 'commute_time', input: Number(c_val), sd: Number(commute_time_stdev), include: c}];
+        
+        let weightArr = [];
+        let weight;
+
+        function calcWeight() {
+          for (let i = 0; i < datasetArr.length; i++) {
+            let {input, sd, datatype, include} = datasetArr[i];
+            let datapoint = Number(d[datatype]);
+
+            if(include) {
+        
+              if ((input - sd) < datapoint && datapoint < (input + sd)) {
+                weightArr.push(1);
+              } else if ((input - 2 * sd) < datapoint && datapoint < (input + 2 * sd)) {
+                weightArr.push(2);
+              } else if ((input - 3 * sd) < datapoint && datapoint < (input + 3 * sd)) {
+                weightArr.push(3);
+              }else if ((input - 4 * sd) < datapoint && datapoint < (input + 4 * sd)) {
+                weightArr.push(4);
+              }else if ((input - 5 * sd) < datapoint && datapoint < (input + 5 * sd)) {
+                weightArr.push(5);
+              }else if ((input - 6 * sd) < datapoint && datapoint < (input + 6 * sd)) {
+                weightArr.push(6);
+              }else if ((input - 7 * sd) < datapoint && datapoint < (input + 7 * sd)) {
+                weightArr.push(7);
+              }else if ((input - 8 * sd) < datapoint && datapoint < (input + 8 * sd)) {
+                weightArr.push(8);
+              } else {
+                weightArr.push(9); 
+              }
+            }
+          }
+          return weight = Number(weightArr.reduce((total, current) => total + current, 0))/weightArr.length;
+        }
+        calcWeight();
+
+        if (weight < 2) {
           return color1;
-        } else if ((val - 2 * stdev) < d.household_income && d.household_income < (val + 2 * stdev)) {
+        } else if (weight < 3) {
           return color2;
-        } else if ((val - 3 * stdev) < d.household_income && d.household_income < (val + 3 * stdev)) {
+        } else if (weight < 4) {
           return color3;
-        }else if ((val - 4 * stdev) < d.household_income && d.household_income < (val + 4 * stdev)) {
+        }else if (weight < 5) {
           return color4;
-        }else if ((val - 5 * stdev) < d.household_income && d.household_income < (val + 5 * stdev)) {
+        }else if (weight < 6) {
           return color5;
-        }else if ((val - 6 * stdev) < d.household_income && d.household_income < (val + 6 * stdev)) {
+        }else if (weight < 7) {
           return color6;
-        }else if ((val - 7 * stdev) < d.household_income && d.household_income < (val + 7 * stdev)) {
+        }else if (weight < 8) {
           return color7;
-        }else if ((val - 8 * stdev) < d.household_income && d.household_income < (val + 8 * stdev)) {
+        }else if (weight < 9) {
           return color8;
         } else {
           return 'white'}
+
+
+        // if ((hi_val - stdev) < d.household_income && d.household_income < (hi_val + stdev)) {
+        //   return color1;
+        // } else if ((hi_val - 2 * stdev) < d.household_income && d.household_income < (hi_val + 2 * stdev)) {
+        //   return color2;
+        // } else if ((hi_val - 3 * stdev) < d.household_income && d.household_income < (hi_val + 3 * stdev)) {
+        //   return color3;
+        // }else if ((hi_val - 4 * stdev) < d.household_income && d.household_income < (hi_val + 4 * stdev)) {
+        //   return color4;
+        // }else if ((hi_val - 5 * stdev) < d.household_income && d.household_income < (hi_val + 5 * stdev)) {
+        //   return color5;
+        // }else if ((hi_val - 6 * stdev) < d.household_income && d.household_income < (hi_val + 6 * stdev)) {
+        //   return color6;
+        // }else if ((hi_val - 7 * stdev) < d.household_income && d.household_income < (hi_val + 7 * stdev)) {
+        //   return color7;
+        // }else if ((hi_val - 8 * stdev) < d.household_income && d.household_income < (hi_val + 8 * stdev)) {
+        //   return color8;
+        // } else {
+        //   return 'white'}
 
       })
       .on("click", function(d) {
@@ -145,6 +208,7 @@ class Map extends Component {
         <option value={this.props.county.standardDeviation.median_age_stdev}>Median Age</option>
       </select>
         <div className="map" />
+        <ActiveCounty />
       </div>
     );
   }
