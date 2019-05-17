@@ -14,8 +14,8 @@ export function getFavorites(id) {
     };
 };
 
-export function addFavorite(favorite) {
-    let data = axios.post(`/favorites/${favorite.favorite_id}`, favorite).then(res => res.data);
+export function addFavorite(id) {
+    let data = axios.post(`/favorites/${id}`).then(res => res.data);
     return {
         type: UPDATE_FAVORITES,
         payload: data

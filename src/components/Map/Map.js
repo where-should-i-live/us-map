@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getCountyData, standardDeviation, getActiveCounty } from "./../../ducks/countyReducer";
+import { addFavorite } from "./../../ducks/favoritesReducer";
+
 import * as d3 from "d3";
 import * as topojson from "topojson-client";
 
@@ -129,5 +131,5 @@ const mapState = reduxState => {
 
 export default connect(
   mapState,
-  { getCountyData, standardDeviation, getActiveCounty }
+  { getCountyData, standardDeviation, getActiveCounty, addFavorite }
 )(Map);
