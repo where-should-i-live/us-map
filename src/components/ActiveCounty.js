@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from "react-redux";
-import { addFavorite } from "./../../../ducks/favoritesReducer";
-
+import { addFavorite } from "./../ducks/favoritesReducer";
 
 function ActiveCounty(props) {
     return (

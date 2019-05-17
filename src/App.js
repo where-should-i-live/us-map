@@ -1,14 +1,11 @@
-import React from 'react';
-import './App.scss';
-import {connect} from 'react-redux';
-import Login from './components/Login/Login';
-import FilterBar from './components/FilterBar/FilterBar';
-import Map from './components/Map/Map';
-import FavoritesBar from './components/Favorites/FavoritesBar';
-
+import React from "react";
+import "./scss/styles.scss";
+import { connect } from "react-redux";
+import Login from "./components/Login";
+import Map from "./components/Map";
+import FavoritesBar from "./components/FavoritesBar";
 
 function App(props) {
-
   return (
     <div className="usmap">
       <Login />
@@ -21,9 +18,9 @@ function App(props) {
 
 const mapState = reduxState => {
   return {
-      user: reduxState.user,
-      favorites: reduxState.favorites,
-      county: reduxState.county
+    user: reduxState.user,
+    favorites: reduxState.favorites,
+    county: reduxState.county
   };
 };
 

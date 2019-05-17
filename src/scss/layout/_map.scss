@@ -1,0 +1,28 @@
+.map {
+  width: 100%;
+  height: 100vh;
+  background: $clr-bg;
+  @include flex-center();
+}
+
+.map-container {
+  width: 98%;
+  @include flex-center();
+  height: 90vh;
+}
+
+.g--counties {
+  fill: $clr-white;
+  & :hover {
+    fill: $clr-red;
+  }
+}
+
+.path__borders--county {
+  @include borders(0.5px);
+}
+
+.path__borders--state,
+.path__borders--nation {
+  @include borders(1px);
+}

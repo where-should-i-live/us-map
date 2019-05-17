@@ -1,0 +1,45 @@
+.favorites {
+  background: $clr-white;
+  height: 450px;
+  display: flex;
+  align-items: center;
+}
+
+.favorites-container {
+  width: 98%;
+  height: 95%;
+  margin: 0 auto;
+  border: 1px solid $clr-black;
+  padding: 0 5px;
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+}
+
+.favorites-card {
+  height: 400px;
+  width: 300px;
+  min-width: 300px;
+  border: 1px solid  $clr-black;
+  background: $clr-bg;
+  color: $clr-white;
+  padding: 5px;
+  margin: 0px 5px;
+}
+
+.select-dataset {
+  font-family: $font-main;
+}
+
+.favorite-note {
+  width: 98%;
+  height: 30%;
+  background: $clr-bg-faded;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.remove {
+  float: right;
+}

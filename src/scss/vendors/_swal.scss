@@ -1,0 +1,20 @@
+.swal-overlay {
+  background: none;
+}
+
+.swal-modal {
+  background: $clr-bg-faded;
+  position: fixed;
+  top: 30px;
+  right: 20px;
+  height: 30px;
+  width: 275px;
+  @include flex-center();
+}
+
+.swal-text {
+  width: 98%;
+  text-align: center;
+  font-size: 12px;
+  color: $clr-input-placeholder;
+}

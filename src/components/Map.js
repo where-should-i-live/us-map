@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import ActiveCounty from './subcomponents/ActiveCounty';
-import { getCountyData, standardDeviation, getActiveCounty } from "./../../ducks/countyReducer";
-import { addFavorite } from "./../../ducks/favoritesReducer";
+import ActiveCounty from './ActiveCounty';
+import { getCountyData, standardDeviation, getActiveCounty } from "./../ducks/countyReducer";
+import { addFavorite } from "./../ducks/favoritesReducer";
 
 import * as d3 from "d3";
 import * as topojson from "topojson-client";
@@ -37,7 +37,7 @@ class Map extends Component {
     const geoPath = d3.geoPath();
 
     const svg = d3
-      .select(".map")
+      .select(".map-container")
       .append("svg")
       .attr("width", 960)
       .attr("height", 600);
@@ -65,7 +65,7 @@ class Map extends Component {
 
     svg
       .append("g")
-      .attr("class", "counties")
+      .attr("class", "g--counties")
       .selectAll("path")
       .data(combinedData)
       .enter()
@@ -73,7 +73,6 @@ class Map extends Component {
       .attr("d", geoPath)
       .attr("id", d => d.id)
       .attr("fill", function shader(d) {
-        ////logic to set color ranges////
         const { hi, hi_val, pv, pv_val, age, age_val, c, c_val } = mapContext.state
         const {household_income_stdev, property_value_stdev, median_age_stdev, commute_time_stdev} = mapContext.props.county.standardDeviation;
 
@@ -142,26 +141,6 @@ class Map extends Component {
         } else {
           return 'white'}
 
-
-        // if ((hi_val - stdev) < d.household_income && d.household_income < (hi_val + stdev)) {
-        //   return color1;
-        // } else if ((hi_val - 2 * stdev) < d.household_income && d.household_income < (hi_val + 2 * stdev)) {
-        //   return color2;
-        // } else if ((hi_val - 3 * stdev) < d.household_income && d.household_income < (hi_val + 3 * stdev)) {
-        //   return color3;
-        // }else if ((hi_val - 4 * stdev) < d.household_income && d.household_income < (hi_val + 4 * stdev)) {
-        //   return color4;
-        // }else if ((hi_val - 5 * stdev) < d.household_income && d.household_income < (hi_val + 5 * stdev)) {
-        //   return color5;
-        // }else if ((hi_val - 6 * stdev) < d.household_income && d.household_income < (hi_val + 6 * stdev)) {
-        //   return color6;
-        // }else if ((hi_val - 7 * stdev) < d.household_income && d.household_income < (hi_val + 7 * stdev)) {
-        //   return color7;
-        // }else if ((hi_val - 8 * stdev) < d.household_income && d.household_income < (hi_val + 8 * stdev)) {
-        //   return color8;
-        // } else {
-        //   return 'white'}
-
       })
       .on("click", function(d) {
         mapContext.props.getActiveCounty(d.id);
@@ -169,7 +148,7 @@ class Map extends Component {
 
     svg
       .append("path")
-      .attr("class", "county-borders")
+      .attr("class", "path__borders--county")
       .attr(
         "d",
         geoPath(
@@ -181,7 +160,7 @@ class Map extends Component {
 
     svg
       .append("path")
-      .attr("class", "state-borders")
+      .attr("class", "path__borders--state")
       .attr(
         "d",
         geoPath(
@@ -193,13 +172,13 @@ class Map extends Component {
 
     svg
       .append("path")
-      .attr("class", "nation-borders")
+      .attr("class", "path__borders--nation")
       .attr("d", geoPath(topojson.mesh(usGeoData, usGeoData.objects.nation)));
   }
 
   render() {
     return (
-      <div className="map-container">
+      <div className="map">
       <input onChange={(e) => this.setState({val: e.target.value})}/>
       <select className='select-dataset' onChange={e => this.setState({dataset: e.target.value})}>
         <option value={this.props.county.standardDeviation.household_income_stdev}>Household Income</option>
@@ -207,7 +186,7 @@ class Map extends Component {
         <option value={this.props.county.standardDeviation.commute_time_stdev}>Commute Time</option>
         <option value={this.props.county.standardDeviation.median_age_stdev}>Median Age</option>
       </select>
-        <div className="map" />
+        <div className="map-container" />
         <ActiveCounty />
       </div>
     );

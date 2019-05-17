@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import swal from 'sweetalert';
 import {connect} from 'react-redux';
-import {registerUser, loginUser, logoutUser, getUser} from './../../ducks/userReducer';
-import {getFavorites} from './../../ducks/favoritesReducer';
+import {registerUser, loginUser, logoutUser, getUser} from '../ducks/userReducer';
+import {getFavorites} from '../ducks/favoritesReducer';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -44,7 +44,7 @@ function Login(props) {
     }
 
     return (
-        <div className='login'>
+        <div className='nav'>
             {props.user.user.isLoggedIn ? <p style={{color: 'white'}}>{props.user.user.user_name}</p> : null}
             {(register) ?
                 <div className='text-input'>
