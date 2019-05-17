@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {connect} from 'react-redux';
-import {deleteFavorite, editNote} from './../../../../ducks/favoritesReducer';
+import {deleteFavorite, editNote} from '../ducks/favoritesReducer';
 
 function FavoritesCard(props) {
 
