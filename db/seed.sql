@@ -23,6 +23,7 @@ CREATE TABLE county (
 	commute_time numeric(5,2),
 	median_age numeric(4,2),
 	slug varchar(100),
+	county_image text,
 	CONSTRAINT county_pk PRIMARY KEY (county_id)
 );
 

@@ -1,4 +1,4 @@
-input {
+ .input-box {
   width: 150px;
   height: 25px;
   color: $clr-white;
@@ -11,11 +11,11 @@ input {
   margin: 5px;
 }
 
-input:focus {
+.input-box:focus {
   outline: none;
 }
 
-input::placeholder {
+.input-box::placeholder {
   color: $clr-input-placeholder;
 }
 
@@ -46,7 +46,7 @@ input::placeholder {
   transform-origin: bottom right;
 }
 
-input:focus ~ .bottom {
+.input-box:focus ~ .bottom {
   transform-origin: bottom left;
   transform: scaleX(1);
 }
@@ -56,7 +56,7 @@ input:focus ~ .bottom {
   transform-origin: top right;
 }
 
-input:focus ~ .right {
+.input-box:focus ~ .right {
   transform-origin: bottom right;
   transform: scaleY(1);
 }
@@ -66,7 +66,7 @@ input:focus ~ .right {
   transform-origin: top left;
 }
 
-input:focus ~ .top {
+.input-box:focus ~ .top {
   transform-origin: top right;
   transform: scaleX(1);
 }
@@ -76,7 +76,7 @@ input:focus ~ .top {
   transform-origin: bottom left;
 }
 
-input:focus ~ .left {
+.input-box:focus ~ .left {
   transform-origin: top left;
   transform: scaleY(1);
 }

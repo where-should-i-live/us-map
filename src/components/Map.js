@@ -22,13 +22,13 @@ class Map extends Component {
       usGeoData: {},
       dataset: "household_income_stdev",
       hi: true,
-      hi_val: 60000,
+        hi_val: 60336,
       pv: true,
       pv_val: 217600,
       age: true,
-      age_val: 38,
+        age_val: 38.1,
       c: true,
-      c_val: 23
+        c_val: 22.29  
     };
   }
   
@@ -127,59 +127,25 @@ class Map extends Component {
       .attr("d", geoPath)
       .attr("id", d => d.id)
       .attr("fill", function shader(d) {
-        const {
-          hi,
-          hi_val,
-          pv,
-          pv_val,
-          age,
-          age_val,
-          c,
-          c_val
-        } = mapContext.state;
-        const {
-          household_income_stdev,
-          property_value_stdev,
-          median_age_stdev,
-          commute_time_stdev
-        } = mapContext.props.county.standardDeviation;
+        const {hi, hi_val, pv, pv_val, age, age_val, c, c_val} = mapContext.state
+        const {household_income_stdev, property_value_stdev, median_age_stdev, commute_time_stdev} = mapContext.props.county.standardDeviation;
 
-        const color8 = "#edfdff";
-        const color7 = "#a6f7ff";
-        const color6 = "#71f3ff";
-        const color5 = "#3cefff";
-        const color4 = "#32c4d1";
-        const color3 = "#21838c";
-        const color2 = "#16575d";
-        const color1 = "#0b2c2f";
+        const color8 = '#edfdff' 
+        const color7 = '#a6f7ff'
+        const color6 = '#71f3ff'
+        const color5 = '#3cefff'
+        const color4 = '#32c4d1'
+        const color3 = '#21838c'
+        const color2= '#16575d'
+        const color1 = '#0b2c2f'
 
         let datasetArr = [
-          {
-            datatype: "household_income",
-            input: Number(hi_val),
-            sd: Number(household_income_stdev),
-            include: hi
-          },
-          {
-            datatype: "property_value",
-            input: Number(pv_val),
-            sd: Number(property_value_stdev),
-            include: pv
-          },
-          {
-            datatype: "median_age",
-            input: Number(age_val),
-            sd: Number(median_age_stdev),
-            include: age
-          },
-          {
-            datatype: "commute_time",
-            input: Number(c_val),
-            sd: Number(commute_time_stdev),
-            include: c
-          }
-        ];
-
+                  {datatype: 'household_income', input: Number(hi_val), sd: Number(household_income_stdev), include: hi},
+                  {datatype: 'property_value', input: Number(pv_val), sd: Number(property_value_stdev), include: pv},
+                  {datatype: 'commute_time', input: Number(c_val), sd: Number(commute_time_stdev), include: c},
+                  {datatype: 'median_age', input: Number(age_val), sd: Number(median_age_stdev), include: age}
+                ];
+        
         let weightArr = [];
         let weight;
 
@@ -188,8 +154,8 @@ class Map extends Component {
             let { input, sd, datatype, include } = datasetArr[i];
             let datapoint = Number(d[datatype]);
 
-            if (include) {
-              if (input - sd < datapoint && datapoint < input + sd) {
+            if(include) {        
+              if ((input - sd) < datapoint && datapoint < (input + sd)) {
                 weightArr.push(1);
               } else if (
                 input - 2 * sd < datapoint &&
@@ -264,34 +230,98 @@ class Map extends Component {
 
   render() {
     // let counties = data.map(county => <path />)
+    const {household_income_min, household_income_max, property_value_min, property_value_max, commute_time_min, commute_time_max, median_age_min, median_age_max} = this.props.county.standardDeviation;
+    const {hi, hi_val, pv, pv_val, c, c_val, age, age_val} = this.state;
     return (
       <div className="map">
-        <input onChange={e => this.setState({ val: e.target.value })} />
-        <select
-          className="select-dataset"
-          onChange={e => this.setState({ dataset: e.target.value })}
-        >
-          <option
-            value={this.props.county.standardDeviation.household_income_stdev}
-          >
-            Household Income
-          </option>
-          <option
-            value={this.props.county.standardDeviation.property_value_stdev}
-          >
-            Property Value
-          </option>
-          <option
-            value={this.props.county.standardDeviation.commute_time_stdev}
-          >
-            Commute Time
-          </option>
-          <option value={this.props.county.standardDeviation.median_age_stdev}>
-            Median Age
-          </option>
-        </select>
-        <ActiveCounty />
-        <div className="map-container">
+          <div className='info-section'>
+              <div className='data-filters'>
+                <div className='data-option' style={!hi ? {background: 'hsla(0, 0%, 100%, 0.2)', borderRadius: '5px'} : null}>
+                  <div className='data-label'>
+                    <p className={hi ? 'data-text strikethrough' : 'data-text'} style={!hi ? {color: 'hsla(0, 0%, 100%, 0.6)'} : null} onClick={() => this.setState({hi: !hi})}>Household Income</p>
+                    {hi ? <p className='active-val'>${hi_val}</p> : null}
+                  </div>
+                  {hi ?
+                    <div className='slide-row'>
+                        <p className='datapoint text-right'>${household_income_min}</p>
+                        <div className='slidecontainer'>
+                          <input  type='range'
+                                  className='slider'
+                                  min={household_income_min}
+                                  max={household_income_max}
+                                  value={hi_val}
+                                  onChange={(e) => this.setState({hi_val: Number(e.target.value)})}/>
+                        </div>
+                        <p className='datapoint text-left'>${household_income_max}</p>
+                    </div>
+                  :
+                  null}
+                </div>
+                <div className='data-option' style={!pv ? {background: 'hsla(0, 0%, 100%, 0.2)', borderRadius: '5px'} : null}>
+                  <div className='data-label'>
+                    <p className={pv ? 'data-text strikethrough' : 'data-text'} style={!pv ? {color: 'hsla(0, 0%, 100%, 0.6)'} : null} onClick={() => this.setState({pv: !pv})}>Property Value</p>
+                    {pv ? <p className='active-val'>${pv_val}</p> : null}
+                  </div>
+                  {pv ?
+                    <div className='slide-row'>
+                        <p className='datapoint text-right'>${property_value_min}</p>
+                        <div className='slidecontainer'>
+                          <input  type='range'
+                                  className='slider'
+                                  min={property_value_min}
+                                  max={property_value_max}
+                                  value={pv_val}
+                                  onChange={(e) => this.setState({pv_val: Number(e.target.value)})}/>
+                        </div>
+                        <p className='datapoint text-left'>${property_value_max}</p>
+                    </div>
+                  :
+                  null}
+                </div>
+                <div className='data-option' style={!c ? {background: 'hsla(0, 0%, 100%, 0.2)', borderRadius: '5px'} : null}>
+                  <div className='data-label'>
+                    <p className={c ? 'data-text strikethrough' : 'data-text'} style={!c ? {color: 'hsla(0, 0%, 100%, 0.6)'} : null} onClick={() => this.setState({c: !c})}>Commute Time</p>
+                    {c ? <p className='active-val'>{c_val} minutes</p> : null}
+                  </div>
+                  {c ?
+                    <div className='slide-row'>
+                      <p className='datapoint text-right'>{commute_time_min} min</p>
+                      <div className='slidecontainer'>
+                        <input  type='range'
+                                className='slider'
+                                min={commute_time_min}
+                                max={commute_time_max}
+                                value={c_val}
+                                onChange={(e) => this.setState({c_val: Number(e.target.value)})}/>
+                      </div>
+                      <p className='datapoint text-left'>{commute_time_max} min</p>
+                    </div>
+                  : null}
+                </div>
+                <div className='data-option' style={!age ? {background: 'hsla(0, 0%, 100%, 0.2)', borderRadius: '5px'} : null}>
+                  <div className='data-label'>
+                    <p className={age ? 'data-text strikethrough' : 'data-text'} style={!age ? {color: 'hsla(0, 0%, 100%, 0.6)'} : null} onClick={() => this.setState({age: !age})}>Median Age</p>
+                    {age ? <p className='active-val'>{age_val} years</p> : null}
+                  </div>
+                  {age ?
+                    <div className='slide-row'>
+                      <p className='datapoint text-right'>{median_age_min} yrs</p>
+                      <div className='slidecontainer'>
+                        <input  type='range'
+                                className='slider'
+                                min={median_age_min}
+                                max={median_age_max}
+                                value={age_val}
+                                onChange={(e) => this.setState({age_val: Number(e.target.value)})}/>
+                      </div>
+                      <p className='datapoint text-left'>{median_age_max} yrs</p>
+                    </div>
+                  : null}
+                </div>
+              </div>
+            <ActiveCounty />
+          </div>
+          <div className="map-container">
           <svg
             width="100%"
             height="100%"
