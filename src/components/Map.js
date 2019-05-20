@@ -8,14 +8,18 @@ import {
 } from "./../ducks/countyReducer";
 import { addFavorite } from "./../ducks/favoritesReducer";
 
+import ReactDOM from "react-dom";
 import * as d3 from "d3";
 import * as topojson from "topojson-client";
+// ReactDOM.render(document.getElementById("app"));
 
 class Map extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      allTheData: [],
+      usGeoData: {},
       dataset: "household_income_stdev",
       hi: true,
       hi_val: 60000,
@@ -30,30 +34,26 @@ class Map extends Component {
   async componentDidMount() {
     await this.props.getCountyData();
     await this.props.standardDeviation();
-    await this.drawMap();
+    await this.getAllTheData();
+    await this.drawCounties();
+    await this.drawBorders();
   }
 
-  async drawMap() {
-    const mapContext = this;
+  async getAllTheData() {
     const d3data = await fetch("https://d3js.org/us-10m.v1.json");
     const usGeoData = await d3data.json();
-    const countyData = await mapContext.props.county.countyData;
-    const geoPath = d3.geoPath();
+    const topojsonFeatureData = await topojson.feature(
+      usGeoData,
+      usGeoData.objects.counties
+    ).features;
+    const countyData = await this.props.county.countyData;
 
-    const svg = d3
-      .select(".map-container")
-      .append("svg")
-      .attr("width", "100%")
-      .attr("height", "100%")
-      .attr("viewBox", "0 0 960 600")
-
-    const combinedData = topojson.feature(usGeoData, usGeoData.objects.counties)
-      .features;
-
-    function combineData() {
-      for (let i = 0; i < combinedData.length; i++) {
+    let combinedData = topojsonFeatureData;
+    async function combineTheData() {
+      for (let i = 0; i < topojsonFeatureData.length; i++) {
         let value = countyData.find(
-          county => Number(county.county_id) === Number(combinedData[i].id)
+          county =>
+            Number(county.county_id) === Number(topojsonFeatureData[i].id)
         );
         if (value) {
           combinedData[i].county_name = value.county_name;
@@ -65,14 +65,62 @@ class Map extends Component {
           combinedData[i].slug = value.slug;
         }
       }
+      return combinedData;
     }
-    combineData();
+
+    combineTheData();
+    this.setState({
+      allTheData: combinedData,
+      usGeoData: usGeoData
+    });
+  }
+
+  async drawBorders() {
+    const svg = d3.select(this.mapEl);
+    const geoPath = d3.geoPath();
+    const { usGeoData } = this.state;
+    svg
+      .append("path")
+      .attr("class", "path__borders--county")
+      .attr(
+        "d",
+        geoPath(
+          topojson.mesh(usGeoData, usGeoData.objects.counties, function(a, b) {
+            return a !== b;
+          })
+        )
+      );
+
+    svg
+      .append("path")
+      .attr("class", "path__borders--state")
+      .attr(
+        "d",
+        geoPath(
+          topojson.mesh(usGeoData, usGeoData.objects.states, function(a, b) {
+            return a !== b;
+          })
+        )
+      );
+
+    svg
+      .append("path")
+      .attr("class", "path__borders--nation")
+      .attr("d", geoPath(topojson.mesh(usGeoData, usGeoData.objects.nation)));
+  }
+
+  async drawCounties() {
+    const mapContext = this;
+    const svg = d3.select(this.mapEl);
+    const geoPath = d3.geoPath();
+    const { allTheData } = this.state;
+    console.log(allTheData);
 
     svg
       .append("g")
       .attr("class", "g--counties")
       .selectAll("path")
-      .data(combinedData)
+      .data(allTheData)
       .enter()
       .append("path")
       .attr("d", geoPath)
@@ -211,38 +259,10 @@ class Map extends Component {
       .on("click", function(d) {
         mapContext.props.getActiveCounty(d.id);
       });
-
-    svg
-      .append("path")
-      .attr("class", "path__borders--county")
-      .attr(
-        "d",
-        geoPath(
-          topojson.mesh(usGeoData, usGeoData.objects.counties, function(a, b) {
-            return a !== b;
-          })
-        )
-      );
-
-    svg
-      .append("path")
-      .attr("class", "path__borders--state")
-      .attr(
-        "d",
-        geoPath(
-          topojson.mesh(usGeoData, usGeoData.objects.states, function(a, b) {
-            return a !== b;
-          })
-        )
-      );
-
-    svg
-      .append("path")
-      .attr("class", "path__borders--nation")
-      .attr("d", geoPath(topojson.mesh(usGeoData, usGeoData.objects.nation)));
   }
 
   render() {
+    // let counties = data.map(county => <path />)
     return (
       <div className="map">
         <input onChange={e => this.setState({ val: e.target.value })} />
@@ -269,8 +289,15 @@ class Map extends Component {
             Median Age
           </option>
         </select>
-        <div className="map-container" />
         <ActiveCounty />
+        <div className="map-container">
+          <svg
+            width="100%"
+            height="100%"
+            viewBox="0 0 960 600"
+            ref={el => (this.mapEl = el)}
+          />
+        </div>
       </div>
     );
   }
