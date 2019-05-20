@@ -3,12 +3,134 @@
   height: 100vh;
   background: $clr-bg;
   @include flex-center();
+  justify-content: center;
+}
+
+.info-section {
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  height: 90vh;
 }
 
 .map-container {
-  width: 98%;
+  width: 68%;
   @include flex-center();
   height: 90vh;
+}
+
+.data-filters {
+  display: flex;
+  flex-direction: column;
+  width: 98%;
+  margin: 0 auto;
+}
+
+.data-option {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 5px 0;
+  padding: 0px 5px;
+  height: 50px;
+}
+
+.data-label {
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.data-text {
+  text-transform: uppercase;
+  font-family: $font-main;
+  letter-spacing: 0.1em;
+}
+
+.data-text:hover {
+  cursor: pointer;
+}
+
+.active-val {
+  font-size: 16px;
+}
+
+.datapoint {
+  font-size: 12px;
+  width: 10%;
+  color: $clr-input-placeholder;
+  margin: 0 5px;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.active-county {
+  width: 98%;
+  height: 150px;
+  margin: 40px auto 0;
+}
+
+.title-bar {
+  width: 100%;
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid $clr-accent1;
+}
+
+h1 {
+  font-family: $font-main;
+  font-size: 24px;
+  color: $clr-white;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 400;
+}
+
+.favorite {
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  border: none;
+  background: none;
+  color: $clr-white;
+}
+
+.favorite:hover {
+  color: #fc2f70;
+}
+
+.favorite:focus {
+  outline: 0;
+}
+
+.county-data {
+  color: $clr-white;
+  width: 100%;
+  margin: 5px 0;
+  display: flex;
+}
+
+.county-data-title {
+  width: 30%;
+  text-transform: uppercase;
+  margin-right: 10px;
+  color: $clr-accent1;
+  border-right: 1px solid $clr-accent1;
+}
+
+.county-data p {
+  width: 70%;
 }
 
 .g--counties {
@@ -25,4 +147,88 @@
 .path__borders--state,
 .path__borders--nation {
   @include borders(1px);
+}
+
+///////slider styling //////////
+
+.slide-row {
+  width: 98%;
+  margin: 0 auto;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: inherit;
+}
+
+.slidecontainer {
+  width: 80%;
+  margin: 0 auto; 
+  color: white;
+  display: flex;
+}
+
+.slider {
+  -webkit-appearance: none;  /* Override default CSS styles */
+  appearance: none;
+  width: 100%;
+  height: 15px;
+  background: $clr-bg-faded;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+  transition: opacity .2s;
+}
+
+.slider:hover {
+  opacity: 1; 
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */ 
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: $clr-accent1;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: $clr-accent1;
+  cursor: pointer;
+}
+
+.strikethrough {
+  position: relative;
+}
+
+.strikethrough::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-color: $clr-accent1;
+  transform-origin: center right;
+  transform: scaleX(0) translateY(-50%);
+  transition: transform 0.3s ease;
+}
+
+.strikethrough:hover {
+  color: hsla(0, 0%, 100%, 0.8);
+}
+
+.strikethrough:hover::before {
+  transform-origin: center left;
+  transform: scaleX(1) translateY(-50%);
+}
+
+.strikethrough:focus {
+  outline: 0;
 }
