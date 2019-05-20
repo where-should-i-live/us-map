@@ -1,14 +1,15 @@
 .map {
-  width: 100%;
+  width: 100vw;
   height: 100vh;
   background: $clr-bg;
-  @include flex-center();
+  display: flex;
+  align-items: center;
 }
 
 .map-container {
-  width: 98%;
+  height: 100%;
+  width: 80%;
   @include flex-center();
-  height: 90vh;
 }
 
 .g--counties {

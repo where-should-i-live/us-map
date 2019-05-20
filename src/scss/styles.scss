@@ -15,6 +15,7 @@
 @import "../scss/vendors/swal";
 
 .layout {
-  @include flex-center();
+  display: flex;
+  flex-direction: column;
   font-family: $font-main;
 }
