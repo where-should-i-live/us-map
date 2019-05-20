@@ -7,7 +7,7 @@ import FavoritesBar from "./components/FavoritesBar";
 
 function App(props) {
   return (
-    <div className="usmap">
+    <div className="layout">
       <Login />
       {/* <FilterBar /> */}
       <Map />

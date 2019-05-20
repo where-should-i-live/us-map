@@ -45,10 +45,10 @@ function Login(props) {
 
     return (
         <div className='nav'>
-            {props.user.user.isLoggedIn ? <p style={{color: 'white'}}>{props.user.user.user_name}</p> : null}
+            {props.user.user.isLoggedIn ? <p>{props.user.user.user_name}</p> : null}
             {(register) ?
                 <div className='text-input'>
-                    <input type="text" placeholder="name" value={user_name} onChange={e => setUserName(e.target.value)}/>
+                    <input className='input-box' type="text" placeholder="name" value={user_name} onChange={e => setUserName(e.target.value)}/>
                     <span className="bottom"></span>
                     <span className="right"></span>
                     <span className="top"></span>
@@ -57,7 +57,7 @@ function Login(props) {
             : null}
             {(login || register) ? 
                 <div className='text-input'>
-                    <input type="text" placeholder="email" value={user_email} onChange={e => setUserEmail(e.target.value)}/>
+                    <input className='input-box' type="text" placeholder="email" value={user_email} onChange={e => setUserEmail(e.target.value)}/>
                     <span className="bottom"></span>
                     <span className="right"></span>
                     <span className="top"></span>
@@ -66,7 +66,7 @@ function Login(props) {
             : null}
             {(login || register) ? 
                 <div className='text-input'>
-                    <input type="password" placeholder="password" value={password} onChange={e => setPassword(e.target.value)} onKeyPress={(e) => processUser(e)}/>
+                    <input className='input-box' type="password" placeholder="password" value={password} onChange={e => setPassword(e.target.value)} onKeyPress={(e) => processUser(e)}/>
                     <span className="bottom"></span>
                     <span className="right"></span>
                     <span className="top"></span>
