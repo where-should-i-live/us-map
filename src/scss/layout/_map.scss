@@ -1,9 +1,15 @@
 .map {
-  width: 100%;
+  width: 100vw;
   height: 100vh;
   background: $clr-bg;
+  display: flex;
+  align-items: center;
+}
+
+.map-container {
+  height: 100%;
+  width: 80%;
   @include flex-center();
-  justify-content: center;
 }
 
 .info-section {
@@ -16,7 +22,6 @@
 .map-container {
   width: 68%;
   @include flex-center();
-  height: 90vh;
 }
 
 .data-filters {
