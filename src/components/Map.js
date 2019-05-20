@@ -31,6 +31,7 @@ class Map extends Component {
       c_val: 23
     };
   }
+  
   async componentDidMount() {
     await this.props.getCountyData();
     await this.props.standardDeviation();
@@ -49,7 +50,7 @@ class Map extends Component {
     const countyData = await this.props.county.countyData;
 
     let combinedData = topojsonFeatureData;
-    async function combineTheData() {
+    function combineTheData() {
       for (let i = 0; i < topojsonFeatureData.length; i++) {
         let value = countyData.find(
           county =>
