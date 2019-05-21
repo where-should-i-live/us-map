@@ -27,13 +27,19 @@ app.use(session({
     resave: false
 }));
 
+// AUTH CONTROLlER
 app.post('/auth/register', authController.registerUser);
 app.post('/auth/login', authController.loginUser);
 app.get('/auth/logout', authController.logoutUser);
 app.get('/user', authController.getUser);
+app.post('reset', authController.sendEmail)
+
+// DATA CONTROLLER
 app.get('/data', dataController.getCountyData);
 app.get('/data/calc', dataController.standardDeviation);
 app.get('/data/:id', dataController.getActiveCounty);
+
+// FAVORTIES CONTROLLER
 app.get('/favorites/:id', favoritesController.getFavorites);
 app.delete('/favorites/:id', favoritesController.deleteFavorite);
 app.post('/favorites/:id', favoritesController.addFavorite);

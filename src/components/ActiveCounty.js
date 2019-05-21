@@ -10,7 +10,7 @@ import { faHeart } from '@fortawesome/free-solid-svg-icons';
 library.add(faHeart);
 
 function ActiveCounty(props) {
-    const {county_id, county_image, county_name, county_state_name, household_income, property_value, commute_time, median_age, avg_temp} = props.county.activeCounty;
+    const {county_id, county_name, county_state_name, household_income, property_value, commute_time, median_age, avg_temp} = props.county.activeCounty;
     return (
         <>
         {county_id ?

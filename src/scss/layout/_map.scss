@@ -112,8 +112,12 @@ h1 {
   }
 }
 
-.select-dataset {
-  font-family: $font-main;
+.favorite:hover {
+  color: $clr-accent2;
+}
+
+.favorite:focus {
+  outline: 0;
 }
 
 .county-data {
@@ -138,7 +142,7 @@ h1 {
 .g--counties {
   fill: $clr-white;
   & :hover {
-    fill: $clr-red;
+    fill: $clr-accent3;
   }
 }
 
