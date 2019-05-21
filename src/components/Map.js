@@ -8,10 +8,10 @@ import {
 } from "./../ducks/countyReducer";
 import { addFavorite } from "./../ducks/favoritesReducer";
 
-import ReactDOM from "react-dom";
+// import ReactDOM from "react-dom";
+// ReactDOM.render(document.getElementById("app"));
 import * as d3 from "d3";
 import * as topojson from "topojson-client";
-// ReactDOM.render(document.getElementById("app"));
 
 class Map extends Component {
   constructor(props) {
@@ -23,22 +23,28 @@ class Map extends Component {
       temp: true,
         temp_val: 55,
       hi: true,
-        hi_val: 60336,
+      hi_val: 60336,
       pv: true,
         pv_val: 217600,
       age: true,
         age_val: 38,
       c: true,
-        c_val: 22.29  
+      c_val: 22.29
     };
   }
-  
+
   async componentDidMount() {
     await this.props.getCountyData();
     await this.props.standardDeviation();
     await this.getAllTheData();
+    await this.drawG();
     await this.drawCounties();
+    await this.shadeCounties();
     await this.drawBorders();
+  }
+
+  componentDidUpdate() {
+    this.shadeCounties();
   }
 
   async getAllTheData() {
@@ -111,6 +117,14 @@ class Map extends Component {
       .attr("d", geoPath(topojson.mesh(usGeoData, usGeoData.objects.nation)));
   }
 
+  async drawG() {
+    const svg = d3.select(this.mapEl);
+
+    svg
+      .append("g")
+      .attr("class", "g--counties")
+  }
+
   async drawCounties() {
     const mapContext = this;
     const svg = d3.select(this.mapEl);
@@ -118,26 +132,39 @@ class Map extends Component {
     const { allTheData } = this.state;
 
     svg
-      .append("g")
-      .attr("class", "g--counties")
+      .select('g')
       .selectAll("path")
       .data(allTheData)
       .enter()
       .append("path")
       .attr("d", geoPath)
       .attr("id", d => d.id)
+      .on("click", function(d) {
+        mapContext.props.getActiveCounty(d.id);
+      });
+  }
+
+  async shadeCounties() {
+    const mapContext = this;
+    const svg = d3.select(this.mapEl);
+    const { allTheData } = this.state;
+    svg
+      .selectAll("path")
+      .data(allTheData)
+      .transition()
+      .duration(1000)
       .attr("fill", function shader(d) {
         const {hi, hi_val, temp, temp_val, pv, pv_val, age, age_val, c, c_val} = mapContext.state
         const {household_income_stdev, avg_temp_stdev, property_value_stdev, median_age_stdev, commute_time_stdev} = mapContext.props.county.standardDeviation;
 
-        const color8 = '#edfdff' 
-        const color7 = '#a6f7ff'
-        const color6 = '#71f3ff'
-        const color5 = '#3cefff'
-        const color4 = '#32c4d1'
-        const color3 = '#21838c'
-        const color2= '#16575d'
-        const color1 = '#0b2c2f'
+        const color8 = "#edfdff";
+        const color7 = "#a6f7ff";
+        const color6 = "#71f3ff";
+        const color5 = "#3cefff";
+        const color4 = "#32c4d1";
+        const color3 = "#21838c";
+        const color2 = "#16575d";
+        const color1 = "#0b2c2f";
 
         let datasetArr = [
                   {datatype: 'household_income', input: Number(hi_val), sd: Number(household_income_stdev), include: hi},
@@ -155,8 +182,8 @@ class Map extends Component {
             let { input, sd, datatype, include } = datasetArr[i];
             let datapoint = Number(d[datatype]);
 
-            if(include) {        
-              if ((input - sd) < datapoint && datapoint < (input + sd)) {
+            if (include) {
+              if (input - sd < datapoint && datapoint < input + sd) {
                 weightArr.push(1);
               } else if (input - 2 * sd < datapoint && datapoint < input + 2 * sd) {
                 weightArr.push(2);
@@ -203,9 +230,6 @@ class Map extends Component {
           return "white";
         }
       })
-      .on("click", function(d) {
-        mapContext.props.getActiveCounty(d.id);
-      });
   }
 
   render() {
@@ -214,12 +238,45 @@ class Map extends Component {
     const {hi, hi_val, temp, temp_val, pv, pv_val, c, c_val, age, age_val} = this.state;
     return (
       <div className="map">
-          <div className='info-section'>
-              <div className='data-filters'>
-                <div className='data-option' style={!hi ? {background: 'hsla(0, 0%, 100%, 0.2)', borderRadius: '5px'} : null}>
-                  <div className='data-label'>
-                    <p className={hi ? 'data-text strikethrough' : 'data-text'} style={!hi ? {color: 'hsla(0, 0%, 100%, 0.6)'} : null} onClick={() => this.setState({hi: !hi})}>Household Income</p>
-                    {hi ? <p className='active-val'>${hi_val}</p> : null}
+        <div className="info-section">
+          <div className="data-filters">
+            <div
+              className="data-option"
+              style={
+                !hi
+                  ? {
+                      background: "hsla(0, 0%, 100%, 0.2)",
+                      borderRadius: "5px"
+                    }
+                  : null
+              }
+            >
+              <div className="data-label">
+                <p
+                  className={hi ? "data-text strikethrough" : "data-text"}
+                  style={!hi ? { color: "hsla(0, 0%, 100%, 0.6)" } : null}
+                  onClick={() => this.setState({ hi: !hi })}
+                >
+                  Household Income
+                </p>
+                {hi ? <p className="active-val">${hi_val}</p> : null}
+              </div>
+              {hi ? (
+                <div className="slide-row">
+                  <p className="datapoint text-right">
+                    ${household_income_min}
+                  </p>
+                  <div className="slidecontainer">
+                    <input
+                      type="range"
+                      className="slider"
+                      min={household_income_min}
+                      max={household_income_max}
+                      value={hi_val}
+                      onChange={e =>
+                        this.setState({ hi_val: Number(e.target.value) })
+                      }
+                    />
                   </div>
                   {hi ?
                     <div className='slide-row'>
@@ -282,10 +339,43 @@ class Map extends Component {
                   :
                   null}
                 </div>
-                <div className='data-option' style={!c ? {background: 'hsla(0, 0%, 100%, 0.2)', borderRadius: '5px'} : null}>
-                  <div className='data-label'>
-                    <p className={c ? 'data-text strikethrough' : 'data-text'} style={!c ? {color: 'hsla(0, 0%, 100%, 0.6)'} : null} onClick={() => this.setState({c: !c})}>Commute Time</p>
-                    {c ? <p className='active-val'>{c_val} minutes</p> : null}
+              ) : null}
+            </div>
+            <div
+              className="data-option"
+              style={
+                !c
+                  ? {
+                      background: "hsla(0, 0%, 100%, 0.2)",
+                      borderRadius: "5px"
+                    }
+                  : null
+              }
+            >
+              <div className="data-label">
+                <p
+                  className={c ? "data-text strikethrough" : "data-text"}
+                  style={!c ? { color: "hsla(0, 0%, 100%, 0.6)" } : null}
+                  onClick={() => this.setState({ c: !c })}
+                >
+                  Commute Time
+                </p>
+                {c ? <p className="active-val">{c_val} minutes</p> : null}
+              </div>
+              {c ? (
+                <div className="slide-row">
+                  <p className="datapoint text-right">{commute_time_min} min</p>
+                  <div className="slidecontainer">
+                    <input
+                      type="range"
+                      className="slider"
+                      min={commute_time_min}
+                      max={commute_time_max}
+                      value={c_val}
+                      onChange={e =>
+                        this.setState({ c_val: Number(e.target.value) })
+                      }
+                    />
                   </div>
                   {c ?
                     <div className='slide-row'>
@@ -303,10 +393,43 @@ class Map extends Component {
                     </div>
                   : null}
                 </div>
-                <div className='data-option' style={!age ? {background: 'hsla(0, 0%, 100%, 0.2)', borderRadius: '5px'} : null}>
-                  <div className='data-label'>
-                    <p className={age ? 'data-text strikethrough' : 'data-text'} style={!age ? {color: 'hsla(0, 0%, 100%, 0.6)'} : null} onClick={() => this.setState({age: !age})}>Median Age</p>
-                    {age ? <p className='active-val'>{age_val} years</p> : null}
+              ) : null}
+            </div>
+            <div
+              className="data-option"
+              style={
+                !age
+                  ? {
+                      background: "hsla(0, 0%, 100%, 0.2)",
+                      borderRadius: "5px"
+                    }
+                  : null
+              }
+            >
+              <div className="data-label">
+                <p
+                  className={age ? "data-text strikethrough" : "data-text"}
+                  style={!age ? { color: "hsla(0, 0%, 100%, 0.6)" } : null}
+                  onClick={() => this.setState({ age: !age })}
+                >
+                  Median Age
+                </p>
+                {age ? <p className="active-val">{age_val} years</p> : null}
+              </div>
+              {age ? (
+                <div className="slide-row">
+                  <p className="datapoint text-right">{median_age_min} yrs</p>
+                  <div className="slidecontainer">
+                    <input
+                      type="range"
+                      className="slider"
+                      min={median_age_min}
+                      max={median_age_max}
+                      value={age_val}
+                      onChange={e =>
+                        this.setState({ age_val: Number(e.target.value) })
+                      }
+                    />
                   </div>
                   {age ?
                     <div className='slide-row'>
@@ -324,16 +447,19 @@ class Map extends Component {
                     </div>
                   : null}
                 </div>
-              </div>
-            <ActiveCounty />
+              ) : null}
+            </div>
           </div>
-          <div className="map-container">
+          <ActiveCounty />
+        </div>
+        <div className="map-container">
           <svg
             width="100%"
             height="100%"
             viewBox="0 0 960 600"
             ref={el => (this.mapEl = el)}
-          />
+          >
+          </svg>
         </div>
       </div>
     );
