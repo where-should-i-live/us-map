@@ -20,13 +20,14 @@ class Map extends Component {
     this.state = {
       allTheData: [],
       usGeoData: {},
-      dataset: "household_income_stdev",
+      temp: true,
+        temp_val: 55,
       hi: true,
         hi_val: 60336,
       pv: true,
-      pv_val: 217600,
+        pv_val: 217600,
       age: true,
-        age_val: 38.1,
+        age_val: 38,
       c: true,
         c_val: 22.29  
     };
@@ -115,7 +116,6 @@ class Map extends Component {
     const svg = d3.select(this.mapEl);
     const geoPath = d3.geoPath();
     const { allTheData } = this.state;
-    console.log(allTheData);
 
     svg
       .append("g")
@@ -127,8 +127,8 @@ class Map extends Component {
       .attr("d", geoPath)
       .attr("id", d => d.id)
       .attr("fill", function shader(d) {
-        const {hi, hi_val, pv, pv_val, age, age_val, c, c_val} = mapContext.state
-        const {household_income_stdev, property_value_stdev, median_age_stdev, commute_time_stdev} = mapContext.props.county.standardDeviation;
+        const {hi, hi_val, temp, temp_val, pv, pv_val, age, age_val, c, c_val} = mapContext.state
+        const {household_income_stdev, avg_temp_stdev, property_value_stdev, median_age_stdev, commute_time_stdev} = mapContext.props.county.standardDeviation;
 
         const color8 = '#edfdff' 
         const color7 = '#a6f7ff'
@@ -141,6 +141,7 @@ class Map extends Component {
 
         let datasetArr = [
                   {datatype: 'household_income', input: Number(hi_val), sd: Number(household_income_stdev), include: hi},
+                  {datatype: 'avg_temp', input: Number(temp_val), sd: Number(avg_temp_stdev), include: temp},
                   {datatype: 'property_value', input: Number(pv_val), sd: Number(property_value_stdev), include: pv},
                   {datatype: 'commute_time', input: Number(c_val), sd: Number(commute_time_stdev), include: c},
                   {datatype: 'median_age', input: Number(age_val), sd: Number(median_age_stdev), include: age}
@@ -157,40 +158,19 @@ class Map extends Component {
             if(include) {        
               if ((input - sd) < datapoint && datapoint < (input + sd)) {
                 weightArr.push(1);
-              } else if (
-                input - 2 * sd < datapoint &&
-                datapoint < input + 2 * sd
-              ) {
+              } else if (input - 2 * sd < datapoint && datapoint < input + 2 * sd) {
                 weightArr.push(2);
-              } else if (
-                input - 3 * sd < datapoint &&
-                datapoint < input + 3 * sd
-              ) {
+              } else if (input - 3 * sd < datapoint && datapoint < input + 3 * sd) {
                 weightArr.push(3);
-              } else if (
-                input - 4 * sd < datapoint &&
-                datapoint < input + 4 * sd
-              ) {
+              } else if (input - 4 * sd < datapoint && datapoint < input + 4 * sd) {
                 weightArr.push(4);
-              } else if (
-                input - 5 * sd < datapoint &&
-                datapoint < input + 5 * sd
-              ) {
+              } else if (input - 5 * sd < datapoint && datapoint < input + 5 * sd) {
                 weightArr.push(5);
-              } else if (
-                input - 6 * sd < datapoint &&
-                datapoint < input + 6 * sd
-              ) {
+              } else if (input - 6 * sd < datapoint && datapoint < input + 6 * sd) {
                 weightArr.push(6);
-              } else if (
-                input - 7 * sd < datapoint &&
-                datapoint < input + 7 * sd
-              ) {
+              } else if (input - 7 * sd < datapoint && datapoint < input + 7 * sd) {
                 weightArr.push(7);
-              } else if (
-                input - 8 * sd < datapoint &&
-                datapoint < input + 8 * sd
-              ) {
+              } else if (input - 8 * sd < datapoint && datapoint < input + 8 * sd) {
                 weightArr.push(8);
               } else {
                 weightArr.push(9);
@@ -230,8 +210,8 @@ class Map extends Component {
 
   render() {
     // let counties = data.map(county => <path />)
-    const {household_income_min, household_income_max, property_value_min, property_value_max, commute_time_min, commute_time_max, median_age_min, median_age_max} = this.props.county.standardDeviation;
-    const {hi, hi_val, pv, pv_val, c, c_val, age, age_val} = this.state;
+    const {household_income_min, household_income_max, avg_temp_min, avg_temp_max, property_value_min, property_value_max, commute_time_min, commute_time_max, median_age_min, median_age_max} = this.props.county.standardDeviation;
+    const {hi, hi_val, temp, temp_val, pv, pv_val, c, c_val, age, age_val} = this.state;
     return (
       <div className="map">
           <div className='info-section'>
@@ -247,12 +227,35 @@ class Map extends Component {
                         <div className='slidecontainer'>
                           <input  type='range'
                                   className='slider'
+                                  step='1'
                                   min={household_income_min}
                                   max={household_income_max}
                                   value={hi_val}
                                   onChange={(e) => this.setState({hi_val: Number(e.target.value)})}/>
                         </div>
                         <p className='datapoint text-left'>${household_income_max}</p>
+                    </div>
+                  :
+                  null}
+                </div>
+                <div className='data-option' style={!temp ? {background: 'hsla(0, 0%, 100%, 0.2)', borderRadius: '5px'} : null}>
+                  <div className='data-label'>
+                    <p className={temp ? 'data-text strikethrough' : 'data-text'} style={!hi ? {color: 'hsla(0, 0%, 100%, 0.6)'} : null} onClick={() => this.setState({temp: !temp})}>Average Temperature</p>
+                    {temp ? <p className='active-val'>{temp_val} <span>&#176;</span>F</p> : null}
+                  </div>
+                  {temp ?
+                    <div className='slide-row'>
+                        <p className='datapoint text-right'>{avg_temp_min} <span>&#176;</span>F</p>
+                        <div className='slidecontainer'>
+                          <input  type='range'
+                                  className='slider'
+                                  step='1'
+                                  min={avg_temp_min}
+                                  max={avg_temp_max}
+                                  value={temp_val}
+                                  onChange={(e) => this.setState({temp_val: Number(e.target.value)})}/>
+                        </div>
+                        <p className='datapoint text-left'>{avg_temp_max} <span>&#176;</span>F</p>
                     </div>
                   :
                   null}
@@ -268,6 +271,7 @@ class Map extends Component {
                         <div className='slidecontainer'>
                           <input  type='range'
                                   className='slider'
+                                  step='1'
                                   min={property_value_min}
                                   max={property_value_max}
                                   value={pv_val}
@@ -289,6 +293,7 @@ class Map extends Component {
                       <div className='slidecontainer'>
                         <input  type='range'
                                 className='slider'
+                                step='1'
                                 min={commute_time_min}
                                 max={commute_time_max}
                                 value={c_val}
@@ -309,6 +314,7 @@ class Map extends Component {
                       <div className='slidecontainer'>
                         <input  type='range'
                                 className='slider'
+                                step='1'
                                 min={median_age_min}
                                 max={median_age_max}
                                 value={age_val}

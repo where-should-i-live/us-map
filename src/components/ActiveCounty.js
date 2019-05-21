@@ -10,7 +10,7 @@ import { faHeart } from '@fortawesome/free-solid-svg-icons';
 library.add(faHeart);
 
 function ActiveCounty(props) {
-    const {county_id, county_name, county_state_name, household_income, property_value, commute_time, median_age} = props.county.activeCounty;
+    const {county_id, county_image, county_name, county_state_name, household_income, property_value, commute_time, median_age, avg_temp} = props.county.activeCounty;
     return (
         <>
         {county_id ?
@@ -22,6 +22,10 @@ function ActiveCounty(props) {
             <div className='county-data'>
                 <div className='county-data-title'>Household Income</div>
                 <p>${household_income}</p>
+            </div>
+            <div className='county-data'>
+                <div className='county-data-title'>Avg Temperature</div>
+                <p>{avg_temp} <span>&#176;</span>F</p>
             </div>
             <div className='county-data'>
                 <div className='county-data-title'>Property Value</div>

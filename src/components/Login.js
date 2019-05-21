@@ -45,7 +45,7 @@ function Login(props) {
 
     return (
         <div className='nav'>
-            {props.user.user.isLoggedIn ? <p>{props.user.user.user_name}</p> : null}
+            {props.user.user.isLoggedIn ? <p className='user-name'>{props.user.user.user_name}</p> : null}
             {(register) ?
                 <div className='text-input'>
                     <input className='input-box' type="text" placeholder="name" value={user_name} onChange={e => setUserName(e.target.value)}/>
