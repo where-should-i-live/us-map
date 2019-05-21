@@ -5,6 +5,7 @@ import { addFavorite } from "./../../ducks/favoritesReducer";
 
 import * as d3 from "d3";
 import * as topojson from "topojson-client";
+import axios from "axios";
 
 class Map extends Component {
   constructor(props) {
@@ -12,7 +13,8 @@ class Map extends Component {
 
     this.state = {
       dataset: 'household_income_stdev',
-      val: 60000
+      val: 60000,
+      stateData: {}
     };
   }
   async componentDidMount() {
@@ -80,7 +82,6 @@ class Map extends Component {
         const color1 = '#0b2c2f'
 
         if ((val - stdev) < d.household_income && d.household_income < (val + stdev)) {
-          console.log(val)
           return color1;
         } else if ((val - 2 * stdev) < d.household_income && d.household_income < (val + 2 * stdev)) {
           return color2;
@@ -132,12 +133,18 @@ class Map extends Component {
       .append("path")
       .attr("class", "nation-borders")
       .attr("d", geoPath(topojson.mesh(usGeoData, usGeoData.objects.nation)));
-  }
+
+    }
+    
+    insertIntoDB = () => {
+      const { stateData } = this.state
+      axios.post('/api/stateData', stateData)
+    }
 
   render() {
     return (
       <div className="map-container">
-      <input onChange={(e) => this.setState({val: e.target.value})}/>
+      {/* <input onChange={(e) => this.setState({val: e.target.value})}/> */}
       <select className='select-dataset' onChange={e => this.setState({dataset: e.target.value})}>
         <option value={this.props.county.standardDeviation.household_income_stdev}>Household Income</option>
         <option value={this.props.county.standardDeviation.property_value_stdev}>Property Value</option>
