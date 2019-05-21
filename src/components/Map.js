@@ -238,45 +238,12 @@ class Map extends Component {
     const {hi, hi_val, temp, temp_val, pv, pv_val, c, c_val, age, age_val} = this.state;
     return (
       <div className="map">
-        <div className="info-section">
-          <div className="data-filters">
-            <div
-              className="data-option"
-              style={
-                !hi
-                  ? {
-                      background: "hsla(0, 0%, 100%, 0.2)",
-                      borderRadius: "5px"
-                    }
-                  : null
-              }
-            >
-              <div className="data-label">
-                <p
-                  className={hi ? "data-text strikethrough" : "data-text"}
-                  style={!hi ? { color: "hsla(0, 0%, 100%, 0.6)" } : null}
-                  onClick={() => this.setState({ hi: !hi })}
-                >
-                  Household Income
-                </p>
-                {hi ? <p className="active-val">${hi_val}</p> : null}
-              </div>
-              {hi ? (
-                <div className="slide-row">
-                  <p className="datapoint text-right">
-                    ${household_income_min}
-                  </p>
-                  <div className="slidecontainer">
-                    <input
-                      type="range"
-                      className="slider"
-                      min={household_income_min}
-                      max={household_income_max}
-                      value={hi_val}
-                      onChange={e =>
-                        this.setState({ hi_val: Number(e.target.value) })
-                      }
-                    />
+          <div className='info-section'>
+              <div className='data-filters'>
+                <div className='data-option' style={!hi ? {background: 'hsla(0, 0%, 100%, 0.2)', borderRadius: '5px'} : null}>
+                  <div className='data-label'>
+                    <p className={hi ? 'data-text strikethrough' : 'data-text'} style={!hi ? {color: 'hsla(0, 0%, 100%, 0.6)'} : null} onClick={() => this.setState({hi: !hi})}>Household Income</p>
+                    {hi ? <p className='active-val'>${hi_val}</p> : null}
                   </div>
                   {hi ?
                     <div className='slide-row'>
@@ -339,43 +306,10 @@ class Map extends Component {
                   :
                   null}
                 </div>
-              ) : null}
-            </div>
-            <div
-              className="data-option"
-              style={
-                !c
-                  ? {
-                      background: "hsla(0, 0%, 100%, 0.2)",
-                      borderRadius: "5px"
-                    }
-                  : null
-              }
-            >
-              <div className="data-label">
-                <p
-                  className={c ? "data-text strikethrough" : "data-text"}
-                  style={!c ? { color: "hsla(0, 0%, 100%, 0.6)" } : null}
-                  onClick={() => this.setState({ c: !c })}
-                >
-                  Commute Time
-                </p>
-                {c ? <p className="active-val">{c_val} minutes</p> : null}
-              </div>
-              {c ? (
-                <div className="slide-row">
-                  <p className="datapoint text-right">{commute_time_min} min</p>
-                  <div className="slidecontainer">
-                    <input
-                      type="range"
-                      className="slider"
-                      min={commute_time_min}
-                      max={commute_time_max}
-                      value={c_val}
-                      onChange={e =>
-                        this.setState({ c_val: Number(e.target.value) })
-                      }
-                    />
+                <div className='data-option' style={!c ? {background: 'hsla(0, 0%, 100%, 0.2)', borderRadius: '5px'} : null}>
+                  <div className='data-label'>
+                    <p className={c ? 'data-text strikethrough' : 'data-text'} style={!c ? {color: 'hsla(0, 0%, 100%, 0.6)'} : null} onClick={() => this.setState({c: !c})}>Commute Time</p>
+                    {c ? <p className='active-val'>{c_val} minutes</p> : null}
                   </div>
                   {c ?
                     <div className='slide-row'>
@@ -393,43 +327,10 @@ class Map extends Component {
                     </div>
                   : null}
                 </div>
-              ) : null}
-            </div>
-            <div
-              className="data-option"
-              style={
-                !age
-                  ? {
-                      background: "hsla(0, 0%, 100%, 0.2)",
-                      borderRadius: "5px"
-                    }
-                  : null
-              }
-            >
-              <div className="data-label">
-                <p
-                  className={age ? "data-text strikethrough" : "data-text"}
-                  style={!age ? { color: "hsla(0, 0%, 100%, 0.6)" } : null}
-                  onClick={() => this.setState({ age: !age })}
-                >
-                  Median Age
-                </p>
-                {age ? <p className="active-val">{age_val} years</p> : null}
-              </div>
-              {age ? (
-                <div className="slide-row">
-                  <p className="datapoint text-right">{median_age_min} yrs</p>
-                  <div className="slidecontainer">
-                    <input
-                      type="range"
-                      className="slider"
-                      min={median_age_min}
-                      max={median_age_max}
-                      value={age_val}
-                      onChange={e =>
-                        this.setState({ age_val: Number(e.target.value) })
-                      }
-                    />
+                <div className='data-option' style={!age ? {background: 'hsla(0, 0%, 100%, 0.2)', borderRadius: '5px'} : null}>
+                  <div className='data-label'>
+                    <p className={age ? 'data-text strikethrough' : 'data-text'} style={!age ? {color: 'hsla(0, 0%, 100%, 0.6)'} : null} onClick={() => this.setState({age: !age})}>Median Age</p>
+                    {age ? <p className='active-val'>{age_val} years</p> : null}
                   </div>
                   {age ?
                     <div className='slide-row'>
@@ -447,19 +348,16 @@ class Map extends Component {
                     </div>
                   : null}
                 </div>
-              ) : null}
-            </div>
+              </div>
+            <ActiveCounty />
           </div>
-          <ActiveCounty />
-        </div>
-        <div className="map-container">
+          <div className="map-container">
           <svg
             width="100%"
             height="100%"
             viewBox="0 0 960 600"
             ref={el => (this.mapEl = el)}
-          >
-          </svg>
+          />
         </div>
       </div>
     );
