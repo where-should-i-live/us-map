@@ -6,10 +6,10 @@ import {getFavorites} from '../ducks/favoritesReducer';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus } from '@fortawesome/free-solid-svg-icons';
+import { faBan } from '@fortawesome/free-solid-svg-icons';
 
 
-library.add(faMinus);
+library.add(faBan);
 
 
 function Login(props) {
@@ -83,7 +83,7 @@ function Login(props) {
                             setRegister(!register)
                             setShowReset(false)
                             }}}>
-                            <FontAwesomeIcon icon='minus' />
+                            <FontAwesomeIcon icon='ban' />
                     </button> 
                 </div>
                 : null
