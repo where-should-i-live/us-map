@@ -38,6 +38,12 @@ export function getUser() {
     };
 }
 
+export async function sendEmail(email){
+    axios.post('/reset', email).then(res => {
+        res.status(200).send('email sent')
+    })
+}
+
 export default function reducer(state = initialState, action) {
     switch(action.type) {
         case UPDATE_USER + '_FULFILLED':
