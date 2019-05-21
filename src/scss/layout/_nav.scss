@@ -1,0 +1,20 @@
+.nav {
+  background: $clr-bg;
+  height: 50px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 10px;
+}
+
+.user-name {
+  text-align: right;
+  padding-right: 10px;
+  letter-spacing: .3em;
+  color: $clr-white;
+  text-transform: uppercase;
+  border-right: 1px solid $clr-accent1;
+}

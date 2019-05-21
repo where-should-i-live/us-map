@@ -1,0 +1,21 @@
+@import "./base/reset";
+@import "./base/variables";
+@import "./base/mixins";
+@import "./base/functions";
+
+@import "./components/inputs";
+@import "./components/buttons";
+@import "./components/textareas";
+
+@import "../scss/layout/nav";
+@import "../scss/layout/map";
+@import "../scss/layout/favorites";
+@import "../scss/layout/footer";
+
+@import "../scss/vendors/swal";
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  font-family: $font-main;
+}

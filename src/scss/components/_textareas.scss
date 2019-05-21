@@ -1,0 +1,7 @@
+textarea {
+  color: $clr-white;
+  font-family: $font-main;
+  &:focus {
+    outline: 0;
+  }
+}
