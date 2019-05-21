@@ -1,4 +1,14 @@
 const bcrypt = require('bcryptjs');
+const nodemailer = require('nodemailer')
+const { PASSWORD, EMAIL} = process.env
+
+let transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: EMAIL,
+      pass: PASSWORD
+    }
+  })
 
 module.exports = {
     registerUser: async (req, res) => {
@@ -50,5 +60,30 @@ module.exports = {
             res.status(200).send({message: 'Please Log In'});
         }
         else res.status(200).send(req.session.user);
+    },
+
+    sendEmail: async (req, res) => {
+        const db = req.app.get('db')
+        const {email} = req.body
+        const checkUser = await db.get_user_by_email(email)
+        res.status(404).send(alert('user not found please register'))
+        if(checkUser[0]){
+            let mailOption = {
+                from: EMAIL,
+                to: email,
+                subject: 'temparary password',
+                text: `your temparary password is ${tempPass}`
+            }
+    
+            transporter.sendMail(mailOption, function(err) {
+                if(err) {
+                    console.log('Error sending email')
+                }else{
+                    console.log('Email sent!!!')
+                }
+            })
+        }
+        
     }
+    
 }
