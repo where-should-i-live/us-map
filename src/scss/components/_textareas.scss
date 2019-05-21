@@ -1,6 +1,8 @@
 textarea {
   color: $clr-white;
   font-family: $font-main;
+  border: none;
+  padding: 0;
   &:focus {
     outline: 0;
   }

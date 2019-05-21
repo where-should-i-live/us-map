@@ -20,12 +20,12 @@ function ActiveCounty(props) {
                 {props.user.user.isLoggedIn ? <button className='favorite' onClick={() => props.addFavorite(props.county.activeCounty.county_id)}><FontAwesomeIcon icon='heart' /></button> : null}
             </div>
             <div className='county-data'>
-                <div className='county-data-title'>Household Income</div>
-                <p>${household_income}</p>
-            </div>
-            <div className='county-data'>
                 <div className='county-data-title'>Avg Temperature</div>
                 <p>{avg_temp} <span>&#176;</span>F</p>
+            </div>
+            <div className='county-data'>
+                <div className='county-data-title'>Household Income</div>
+                <p>${household_income}</p>
             </div>
             <div className='county-data'>
                 <div className='county-data-title'>Property Value</div>
