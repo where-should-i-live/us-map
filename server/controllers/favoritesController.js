@@ -12,6 +12,13 @@ module.exports = {
         const {user_id} = req.session.user;
         const {id} = req.params;
 
+        const favArr = await db.get_favorite_by_id(id);
+
+        if(favArr[0]) {
+            let favorites = await db.get_favorites_by_user(user_id);
+            return res.status(200).send(favorites)
+        }
+
         let favorites = await db.add_favorite([user_id, id]);
         res.status(200).send(favorites);
     },

@@ -1,0 +1,1 @@
+SELECT * FROM favorites where favorite_county_id = $1;

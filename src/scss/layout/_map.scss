@@ -112,7 +112,7 @@ h1 {
 }
 
 .favorite:hover {
-  color: #fc2f70;
+  color: $clr-accent2;
 }
 
 .favorite:focus {
@@ -141,7 +141,7 @@ h1 {
 .g--counties {
   fill: $clr-white;
   & :hover {
-    fill: $clr-red;
+    fill: $clr-accent3;
   }
 }
 
