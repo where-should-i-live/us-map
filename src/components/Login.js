@@ -73,7 +73,7 @@ function Login(props) {
                     <span className="left"></span>
                 </div>
             : null}
-            {(login || register) ? <button className='cancel-button' onClick={() => {setUserName('');setPassword('');setUserEmail('');{(login) ? setLogin(!login) : setRegister(!register)}}}><FontAwesomeIcon icon='minus' /></button> : null}
+            {(login || register) ? <button className='cancel-button' onClick={() => {setUserName(''); setPassword(''); setUserEmail(''); if (login) {setLogin(!login);} if (register) {setRegister(!register);}}}><FontAwesomeIcon icon='minus' /></button> : null}
             {(!props.user.user.isLoggedIn && !login && !register) ? <button className='login-button' onClick={() => setLogin(!login)}>Login</button> : null}
             {(!props.user.user.isLoggedIn && !login && !register) ? <button className='login-button' onClick={() => setRegister(!register)}>Register</button> : null}
             {props.user.user.isLoggedIn ? <button className='login-button' onClick={() => props.logoutUser()}>Logout</button> : null}

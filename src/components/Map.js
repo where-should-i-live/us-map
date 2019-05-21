@@ -20,6 +20,7 @@ class Map extends Component {
     this.state = {
       allTheData: [],
       usGeoData: {},
+      tooltip: '',
       temp: true,
         temp_val: 55,
       hi: true,
@@ -71,6 +72,7 @@ class Map extends Component {
           combinedData[i].commute_time = value.commute_time;
           combinedData[i].median_age = value.median_age;
           combinedData[i].slug = value.slug;
+          combinedData[i].avg_temp = value.avg_temp;
         }
       }
       return combinedData;
@@ -131,6 +133,7 @@ class Map extends Component {
     const geoPath = d3.geoPath();
     const { allTheData } = this.state;
 
+
     svg
       .select('g')
       .selectAll("path")
@@ -141,7 +144,10 @@ class Map extends Component {
       .attr("id", d => d.id)
       .on("click", function(d) {
         mapContext.props.getActiveCounty(d.id);
-      });
+      })
+      .on("mouseover", function(d) {
+        mapContext.setState({tooltip: `${d.county_name}, ${d.county_state_name}`});
+      })
   }
 
   async shadeCounties() {
@@ -156,15 +162,16 @@ class Map extends Component {
       .attr("fill", function shader(d) {
         const {hi, hi_val, temp, temp_val, pv, pv_val, age, age_val, c, c_val} = mapContext.state
         const {household_income_stdev, avg_temp_stdev, property_value_stdev, median_age_stdev, commute_time_stdev} = mapContext.props.county.standardDeviation;
+        const {activeCounty} = mapContext.props.county;
 
-        const color8 = "#edfdff";
-        const color7 = "#a6f7ff";
-        const color6 = "#71f3ff";
-        const color5 = "#3cefff";
-        const color4 = "#32c4d1";
-        const color3 = "#21838c";
-        const color2 = "#16575d";
-        const color1 = "#0b2c2f";
+        const color8 = '#FEFFE0';
+        const color7 = "rgb(254,255,207)";
+        const color6 = "rgb(202,233,181)";
+        const color5 = "rgb(133,204,187)";
+        const color4 = "rgb(73,183,194)";
+        const color3 = "rgb(50,128,181)";
+        const color2 = "#205274";
+        const color1 = "#173B53";
 
         let datasetArr = [
                   {datatype: 'household_income', input: Number(hi_val), sd: Number(household_income_stdev), include: hi},
@@ -210,7 +217,9 @@ class Map extends Component {
         }
         calcWeight();
 
-        if (weight < 2) {
+        if (activeCounty.county_id === Number(d.id)) {
+          return '#D2691E';
+        } else if (weight < 2) {
           return color1;
         } else if (weight < 3) {
           return color2;
@@ -227,13 +236,12 @@ class Map extends Component {
         } else if (weight < 9) {
           return color8;
         } else {
-          return "white";
+          return "#EDEEEF";
         }
       })
   }
 
   render() {
-    // let counties = data.map(county => <path />)
     const {household_income_min, household_income_max, avg_temp_min, avg_temp_max, property_value_min, property_value_max, commute_time_min, commute_time_max, median_age_min, median_age_max} = this.props.county.standardDeviation;
     const {hi, hi_val, temp, temp_val, pv, pv_val, c, c_val, age, age_val} = this.state;
     return (
@@ -352,12 +360,12 @@ class Map extends Component {
             <ActiveCounty />
           </div>
           <div className="map-container">
-          <svg
-            width="100%"
-            height="100%"
-            viewBox="0 0 960 600"
-            ref={el => (this.mapEl = el)}
-          />
+            <svg
+              width="100%"
+              height="100%"
+              viewBox="0 0 960 600"
+              ref={el => (this.mapEl = el)}
+            />
         </div>
       </div>
     );
