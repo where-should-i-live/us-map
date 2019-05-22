@@ -63,18 +63,17 @@ module.exports = {
     },
 
     sendEmail: async (req, res) => {
-        const db = req.app.get('db')
-        const {email} = req.body
+        const { email, randomStr } = req.body
+        const db = await req.app.get('db')
         const checkUser = await db.get_user_by_email(email)
-        res.status(404).send(alert('user not found please register'))
+        res.status(200).send('user found')
         if(checkUser[0]){
             let mailOption = {
                 from: EMAIL,
                 to: email,
-                subject: 'temparary password',
-                text: `your temparary password is ${tempPass}`
+                subject: 'temporary password',
+                text: `your temporary password is ${randomStr}`
             }
-    
             transporter.sendMail(mailOption, function(err) {
                 if(err) {
                     console.log('Error sending email')
@@ -83,7 +82,15 @@ module.exports = {
                 }
             })
         }
-        
+    },
+
+    updatePassword: async (req, res) => {
+        const db = req.app.get('db')
+        const { value, email } = req.body
+        const salt = bcrypt.genSaltSync(10);
+        const hash = bcrypt.hashSync(value, salt);
+        await db.update_password(email, hash)
+        res.status(200).send('password has been updated')
     }
     
 }
