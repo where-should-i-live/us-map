@@ -13,6 +13,10 @@ import { addFavorite } from "./../ducks/favoritesReducer";
 import * as d3 from "d3";
 import * as topojson from "topojson-client";
 
+// import { library } from '@fortawesome/fontawesome-svg-core';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faQuestion } from '@fortawesome/free-solid-svg-icons';
+
 class Map extends Component {
   constructor(props) {
     super(props);
@@ -22,15 +26,15 @@ class Map extends Component {
       usGeoData: {},
       tooltip: '',
       temp: true,
-      temp_val: 55,
+      temp_val: 36,
       hi: true,
-      hi_val: 60336,
+      hi_val: 22000,
       pv: true,
-      pv_val: 217600,
+      pv_val: 19000,
       age: true,
-      age_val: 38,
+      age_val: 22,
       c: true,
-      c_val: 22.29
+      c_val: 5
     };
   }
 
@@ -40,8 +44,9 @@ class Map extends Component {
     await this.getAllTheData();
     await this.drawG();
     await this.drawCounties();
-    await this.shadeCounties();
-    await this.drawBorders();
+    this.shadeCounties();
+    this.drawBorders();
+    this.props.getActiveCounty(49049);
   }
 
   componentDidUpdate() {
@@ -171,6 +176,33 @@ class Map extends Component {
         const color2 = "#205274";
         const color1 = "#173B53";
 
+        // const color8 = '#fff7f3';
+        // const color7 = "#fde0dd";
+        // const color6 = "#fcc5c0";
+        // const color5 = "#fa9fb5";
+        // const color4 = "#f768a1";
+        // const color3 = "#dd3497";
+        // const color2 = "#ae017e";
+        // const color1 = "#7a0177";
+
+        // const color8 = '#fff7fb';
+        // const color7 = "#ece7f2";
+        // const color6 = "#d0d1e6";
+        // const color5 = "#a6bddb";
+        // const color4 = "#74a9cf";
+        // const color3 = "#3690c0";
+        // const color2 = "#0570b0";
+        // const color1 = "#034e7b";
+
+        // const color8 = '#fff7ec';
+        // const color7 = "#fee8c8";
+        // const color6 = "#fdd49e";
+        // const color5 = "#fdbb84";
+        // const color4 = "#fc8d59";
+        // const color3 = "#ef6548";
+        // const color2 = "#d7301f";
+        // const color1 = "#990000";
+
         let datasetArr = [
           {
             datatype: "household_income",
@@ -262,7 +294,7 @@ class Map extends Component {
         calcWeight();
 
         if (activeCounty.county_id === Number(d.id)) {
-          return '#D2691E';
+          return '#fc2f70';
         } else if (weight < 2) {
           return color1;
         } else if (weight < 3) {
@@ -280,7 +312,7 @@ class Map extends Component {
         } else if (weight < 9) {
           return color8;
         } else {
-          return "#EDEEEF";
+          return "#ffffff";
         }
       });
   }
@@ -291,6 +323,10 @@ class Map extends Component {
     return (
       <div className="map">
         <div className="info-section">
+          <div className='title-bar'>
+            <h1>Adjust Sliders Below</h1>
+            {/* <button className='favorite' onClick={() => {}}><FontAwesomeIcon icon='question' /></button> */}
+          </div>
           <div className="data-filters">
             <div
               className="data-option"
@@ -309,18 +345,18 @@ class Map extends Component {
                   style={!hi ? { color: "hsla(0, 0%, 100%, 0.6)" } : null}
                   onClick={() => this.setState({ temp: !temp })}
                 >
-                  Average Temperature
+                  <span className="label">Average Annual Temperature</span>
                 </p>
                 {temp ? (
                   <p className="active-val">
-                    {temp_val} <span>&#176;</span>F
+                    {temp_val}<span>&#176;</span>F
                   </p>
                 ) : null}
               </div>
               {temp ? (
                 <div className="slide-row">
                   <p className="datapoint text-right">
-                    {avg_temp_min} <span>&#176;</span>F
+                    {Math.round(avg_temp_min)}<span>&#176;</span>F
                   </p>
                   <div className="slidecontainer">
                     <input
@@ -331,12 +367,12 @@ class Map extends Component {
                       max={avg_temp_max}
                       value={temp_val}
                       onChange={e =>
-                        this.setState({ temp_val: Number(e.target.value) })
+                        this.setState({ temp_val: Math.round(Number(e.target.value)) })
                       }
                     />
                   </div>
                   <p className="datapoint text-left">
-                    {avg_temp_max} <span>&#176;</span>F
+                    {Math.floor(avg_temp_max)}<span>&#176;</span>F
                   </p>
                 </div>
               ) : null}
@@ -358,14 +394,14 @@ class Map extends Component {
                   style={!hi ? { color: "hsla(0, 0%, 100%, 0.6)" } : null}
                   onClick={() => this.setState({ hi: !hi })}
                 >
-                  Household Income
+                  <span className="label">Household Income</span>
                 </p>
-                {hi ? <p className="active-val">${hi_val}</p> : null}
+                {hi ? <p className="active-val">${Math.round(hi_val/1000)*1000}</p> : null}
               </div>
               {hi ? (
                 <div className="slide-row">
                   <p className="datapoint text-right">
-                    ${household_income_min}
+                    ${Math.round(household_income_min/1000)*1000}
                   </p>
                   <div className="slidecontainer">
                     <input
@@ -380,7 +416,7 @@ class Map extends Component {
                       }
                     />
                   </div>
-                  <p className="datapoint text-left">${household_income_max}</p>
+                  <p className="datapoint text-left">${Math.round(household_income_max/1000)*1000}</p>
                 </div>
               ) : null}
             </div>
@@ -401,13 +437,13 @@ class Map extends Component {
                   style={!pv ? { color: "hsla(0, 0%, 100%, 0.6)" } : null}
                   onClick={() => this.setState({ pv: !pv })}
                 >
-                  Property Value
+                  <span className="label">Property Value</span>
                 </p>
-                {pv ? <p className="active-val">${pv_val}</p> : null}
+                {pv ? <p className="active-val">${Math.round(pv_val/1000)*1000}</p> : null}
               </div>
               {pv ? (
                 <div className="slide-row">
-                  <p className="datapoint text-right">${property_value_min}</p>
+                  <p className="datapoint text-right">${Math.round(property_value_min/1000)*1000}</p>
                   <div className="slidecontainer">
                     <input
                       type="range"
@@ -421,7 +457,7 @@ class Map extends Component {
                       }
                     />
                   </div>
-                  <p className="datapoint text-left">${property_value_max}</p>
+                  <p className="datapoint text-left">${Math.round(property_value_max/1000)*1000}</p>
                 </div>
               ) : null}
             </div>
@@ -442,13 +478,13 @@ class Map extends Component {
                   style={!c ? { color: "hsla(0, 0%, 100%, 0.6)" } : null}
                   onClick={() => this.setState({ c: !c })}
                 >
-                  Commute Time
+                  <span className="label">Commute Time</span>
                 </p>
-                {c ? <p className="active-val">{c_val} minutes</p> : null}
+                {c ? <p className="active-val">{Math.round(c_val)} minutes</p> : null}
               </div>
               {c ? (
                 <div className="slide-row">
-                  <p className="datapoint text-right">{commute_time_min} min</p>
+                  <p className="datapoint text-right">{Math.round(commute_time_min)} min</p>
                   <div className="slidecontainer">
                     <input
                       type="range"
@@ -458,11 +494,11 @@ class Map extends Component {
                       max={commute_time_max}
                       value={c_val}
                       onChange={e =>
-                        this.setState({ c_val: Number(e.target.value) })
+                        this.setState({ c_val: Math.round(Number(e.target.value)) })
                       }
                     />
                   </div>
-                  <p className="datapoint text-left">{commute_time_max} min</p>
+                  <p className="datapoint text-left">{Math.floor(commute_time_max)} min</p>
                 </div>
               ) : null}
             </div>
@@ -483,13 +519,13 @@ class Map extends Component {
                   style={!age ? { color: "hsla(0, 0%, 100%, 0.6)" } : null}
                   onClick={() => this.setState({ age: !age })}
                 >
-                  Median Age
+                  <span className="label">Median Age</span>
                 </p>
                 {age ? <p className="active-val">{age_val} years</p> : null}
               </div>
               {age ? (
                 <div className="slide-row">
-                  <p className="datapoint text-right">{median_age_min} yrs</p>
+                  <p className="datapoint text-right">{Math.round(median_age_min)} yrs</p>
                   <div className="slidecontainer">
                     <input
                       type="range"
@@ -499,11 +535,11 @@ class Map extends Component {
                       max={median_age_max}
                       value={age_val}
                       onChange={e =>
-                        this.setState({ age_val: Number(e.target.value) })
+                        this.setState({ age_val: Math.round(Number(e.target.value)) })
                       }
                     />
                   </div>
-                  <p className="datapoint text-left">{median_age_max} yrs</p>
+                  <p className="datapoint text-left">{Math.round(median_age_max)} yrs</p>
                 </div>
               ) : null}
             </div>

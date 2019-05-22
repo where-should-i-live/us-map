@@ -27,10 +27,10 @@
   &::after {
     content: "";
     position: absolute;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background-color: $clr-accent1;
+    left: 0px;
+    right: 0px;
+    height: 2.5px;
+    background-color: $clr-fav;
     transform: scaleX(0);
     transition: transform 0.5s ease;
   }
@@ -44,14 +44,4 @@
   }
 }
 
-.cancel-button {
-  color: $clr-accent1;
-  background: none;
-  border: none;
-  &:focus {
-    outline: 0;
-  }
-  &:hover {
-    cursor: pointer;
-  }
-}
+
