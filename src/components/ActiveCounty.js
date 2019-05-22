@@ -21,7 +21,7 @@ function ActiveCounty(props) {
             </div>
             <div className='county-data'>
                 <div className='county-data-title'>Avg Temperature</div>
-                <p>{Math.round(avg_temp)}<span>&#176;</span>F</p>
+                {avg_temp ? <p>{Math.round(avg_temp)}<span>&#176;</span>F</p> : <p>-</p>}
             </div>
             <div className='county-data'>
                 <div className='county-data-title'>Household Income</div>
