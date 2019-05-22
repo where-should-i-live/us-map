@@ -8,7 +8,7 @@ function FavoritesCard(props) {
     const [noteInput, setNoteInput] = useState(props.county.favorite_note);
     const [edit, setEdit] = useState(false); 
     
-    const {favorite_id, county_name, county_state_name, household_income, avg_temperature, property_value, commute_time, median_age, favorite_note} = props.county;
+    const {favorite_id, county_name, county_state_name, household_income, avg_temp, property_value, commute_time, median_age, favorite_note} = props.county;
 
     return (
         <div className='favorites-card'>
@@ -18,7 +18,7 @@ function FavoritesCard(props) {
                 <button className='unfavorite' onClick={() => props.deleteFavorite(favorite_id)}><FontAwesomeIcon icon='heart' /></button>
             </div>
             <div className="card__stat--div">
-                <p className="card__stat">Average Temperature: {avg_temperature}</p>
+                <p className="card__stat">Average Temperature: {avg_temp} <span>&#176;</span>F</p>
                 <p className="card__stat">Median Household Income: ${household_income}</p>
                 <p className="card__stat">Median Property Value: ${property_value}</p>
                 <p className="card__stat">Average Commute Time: {commute_time} minutes</p>
