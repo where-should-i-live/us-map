@@ -3,7 +3,7 @@ import swal from 'sweetalert';
 import {connect} from 'react-redux';
 import {registerUser, loginUser, logoutUser, getUser, sendEmail} from '../ducks/userReducer';
 import {getFavorites} from '../ducks/favoritesReducer';
-
+import axios from 'axios'
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBan } from '@fortawesome/free-solid-svg-icons';
@@ -19,7 +19,10 @@ function Login(props) {
     const [login, setLogin] = useState(false);
     const [register, setRegister] = useState(false);
     const [showReset, setShowReset] = useState(false);
-    const [email, setEmail] = useState('')
+    const [email, setEmail] = useState('');
+    const [tempPass, setTempPass] = useState('')
+    const [showPassReset, setShowPassReset] = useState(false)
+    // const [newPassword, setNewPassword] = useState('')
 
     const processUser = async (event) => {
         if (event.key === 'Enter' && login) {
@@ -42,6 +45,31 @@ function Login(props) {
                 setRegister(false);
             }
             else swal({text: `${user.value.message}`, button: false, timer: 3000});
+        }
+    }
+
+    function sendEmail(event) {
+        if(event.key === 'Enter') {
+            let randomStr = Math.random().toString(15).slice(-10)
+            setTempPass(randomStr)
+            axios.post('/reset', {email, randomStr})
+        }
+    }
+    
+    function checkTempPass(event, value){
+        if(event.key === 'Enter' && value === tempPass) {
+            setShowPassReset(true)
+        }
+    }
+
+    function updatePassword(event, value){
+        if(event.key === 'Enter'){
+            axios.post('/updatePassword', {value, email}).then(() => {
+                setEmail('')
+                setShowPassReset(false)
+                setShowReset(false)
+                setTempPass('')
+            })
         }
     }
 
@@ -75,10 +103,11 @@ function Login(props) {
                     <span className="left"></span>
                 </div>
             : null}
-            {(login || register) ? 
+            {(login || register) && 
                 <div>
                     <button className='cancel-button' 
-                        onClick={() => {setUserName('');setPassword('');setUserEmail('');{(login) ? 
+                        onClick={() => {setUserName('');setPassword('');setUserEmail('');
+                        {(login) ?
                             setLogin(!login) : 
                             setRegister(!register)
                             setShowReset(false)
@@ -86,7 +115,6 @@ function Login(props) {
                             <FontAwesomeIcon icon='ban' />
                     </button> 
                 </div>
-                : null
             }
             {login &&
                 <div style={{
@@ -101,16 +129,32 @@ function Login(props) {
                     forgot password?
                 </button>
                 {showReset &&
-                    <input type='text' placeholder='email' 
-                    style={{textAlign: 'center', marginTop: 10}}
-                    onChange={(e) => setEmail(e.target.value)} 
-                    onKeyPress={(e) => props.sendEmail(email)}/>
+                    <div>
+                        <input type='text' placeholder='email' 
+                            style={{textAlign: 'center', marginTop: 10}}
+                            onChange={(e) => setEmail(e.target.value)} 
+                            onKeyPress={(e) => sendEmail(e)}/>
+                        {(tempPass !== '') &&
+                            <input style={{position: 'absolute', top: 26, right: 9, textAlign: 'center'}}
+                                placeholder='temperary password'
+                                onKeyPress={(e) => checkTempPass(e, e.target.value)}
+                            />
+                        }
+                    </div>
+                }
+                {showPassReset &&
+                    <input placeholder='new password' 
+                        style={{position: 'absolute', textAlign: 'center', top: 26, right: 9}} 
+                        onKeyPress={(e) => updatePassword(e, e.target.value)} 
+                    />
                 }
             </div>
             }
             {(!props.user.user.isLoggedIn && !login && !register) ? <button className='login-button' onClick={() => setLogin(!login)}>Login</button> : null}
             {(!props.user.user.isLoggedIn && !login && !register) ? <button className='login-button' onClick={() => setRegister(!register)}>Register</button> : null}
-            {props.user.user.isLoggedIn ? <button className='login-button' onClick={() => props.logoutUser()}>Logout</button> : null}
+            {props.user.user.isLoggedIn &&
+                <button className='login-button' onClick={() => props.logoutUser()}>Logout</button>
+            }
         </div>
     );
 };
@@ -122,4 +166,4 @@ const mapState = reduxState => {
     };
 };
 
-export default connect(mapState, {registerUser, loginUser, logoutUser, getUser, getFavorites, sendEmail})(Login);
+export default connect(mapState, {registerUser, loginUser, logoutUser, getUser, getFavorites})(Login);
