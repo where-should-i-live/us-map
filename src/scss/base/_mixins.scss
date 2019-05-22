@@ -4,7 +4,7 @@
   align-items: center;
 }
 
-@mixin borders($strk-wdt) {
+@mixin borders($strk-wdt, $clr-borders) {
   fill: none;
   stroke: $clr-borders;
   stroke-width: $strk-wdt;
