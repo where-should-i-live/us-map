@@ -20,24 +20,24 @@ function ActiveCounty(props) {
                 {props.user.user.isLoggedIn ? <button className='favorite' onClick={() => props.addFavorite(props.county.activeCounty.county_id)}><FontAwesomeIcon icon='heart' /></button> : null}
             </div>
             <div className='county-data'>
-                <div className='county-data-title'>Household Income</div>
-                <p>${household_income}</p>
+                <div className='county-data-title'>Avg Temperature</div>
+                <p>{Math.round(avg_temp)}<span>&#176;</span>F</p>
             </div>
             <div className='county-data'>
-                <div className='county-data-title'>Avg Temperature</div>
-                <p>{avg_temp} <span>&#176;</span>F</p>
+                <div className='county-data-title'>Household Income</div>
+                <p>${Math.round(household_income/1000)*1000}</p>
             </div>
             <div className='county-data'>
                 <div className='county-data-title'>Property Value</div>
-                <p>${property_value}</p>
+                <p>${Math.round(property_value/1000)*1000}</p>
             </div>
             <div className='county-data'>
                 <div className='county-data-title'>Commute Time</div>
-                <p>{commute_time} minutes</p>
+                <p>{Math.round(commute_time)} minutes</p>
             </div>
             <div className='county-data'>
                 <div className='county-data-title'>Median Age</div>
-                <p>{median_age} years</p>
+                <p>{Math.round(median_age)} years</p>
             </div>
         </div> 
         : <div className='active-county'></div>}

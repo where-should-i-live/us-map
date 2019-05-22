@@ -1,6 +1,6 @@
 .map {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: calc(100vh - 50px);
   background: $clr-bg;
   display: flex;
   align-items: center;
@@ -8,27 +8,39 @@
 
 .map-container {
   height: 100%;
-  width: 80%;
+  width: 75%;
+  padding-top: 10px;
+  padding-bottom: 20px;
+  padding-left: 30px;
   @include flex-center();
 }
 
 .info-section {
+  height: 100%;
+  width: 25%;
   display: flex;
   flex-direction: column;
-  width: 30%;
-  height: 90vh;
+  justify-content: flex-start;
+  margin-left: 20px;
+  padding-top: 20px;
 }
 
-.map-container {
-  width: 68%;
-  @include flex-center();
+.info-section-title {
+  width: 100%;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border-bottom: 1.5px solid $clr-fav;
 }
 
 .data-filters {
   display: flex;
   flex-direction: column;
-  width: 98%;
-  margin: 0 auto;
+  width: 100%;
+  padding-bottom: 10px;
+  margin-top: 25px;
 }
 
 .data-option {
@@ -37,16 +49,17 @@
   flex-direction: column;
   justify-content: space-between;
   margin: 5px 0;
-  padding: 0px 5px;
-  height: 50px;
 }
 
 .data-label {
-  color: white;
+  color: $clr-white;
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin: 10px 0;
+  .label {
+    color: $clr-accent1;
+  }
 }
 
 .data-text {
@@ -67,7 +80,7 @@
   font-size: 12px;
   width: 10%;
   color: $clr-input-placeholder;
-  margin: 0 5px;
+  margin: 0 10px;
 }
 
 .text-right {
@@ -79,18 +92,17 @@
 }
 
 .active-county {
-  width: 98%;
-  height: 150px;
-  margin: 40px auto 0;
+  width: 100%;
 }
 
 .title-bar {
   width: 100%;
-  height: 40px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid $clr-accent1;
+  padding-bottom: 5px;
+  border-bottom: 1.5px solid $clr-fav;
+  margin-top: 25px;
 }
 
 h1 {
@@ -103,16 +115,22 @@ h1 {
 }
 
 .favorite {
-  width: 40px;
-  height: 40px;
-  font-size: 20px;
+  font-size: 24px;
   border: none;
   background: none;
   color: $clr-white;
+  transition: all 0.1s ease-in-out;
+  &:focus {
+    outline: 0;
+  }
+  &:hover {
+    color: $clr-fav;
+    transform: scale(1.5);
+  }
 }
 
 .favorite:hover {
-  color: #fc2f70;
+  color: $clr-accent2;
 }
 
 .favorite:focus {
@@ -120,83 +138,81 @@ h1 {
 }
 
 .county-data {
-  color: $clr-white;
   width: 100%;
-  margin: 5px 0;
+  margin: 15px 0;
   display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .county-data-title {
-  width: 30%;
   text-transform: uppercase;
   margin-right: 10px;
   color: $clr-accent1;
-  border-right: 1px solid $clr-accent1;
 }
 
 .county-data p {
-  width: 70%;
+  color: $clr-white;
 }
 
 .g--counties {
   fill: $clr-white;
   & :hover {
-    fill: $clr-red;
+    fill: $clr-fav;
   }
 }
 
 .path__borders--county {
-  @include borders(0.5px);
+  @include borders(0.5px, $clr-black);
 }
 
-.path__borders--state,
+.path__borders--state {
+  @include borders(1.3px, $clr-bg);
+}
+
 .path__borders--nation {
-  @include borders(1px);
+  @include borders(0.25px, $clr-bg);
 }
 
 ///////slider styling //////////
 
 .slide-row {
-  width: 98%;
-  margin: 0 auto;
-  color: white;
+  width: 100%;
+  color: $clr-white;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-family: inherit;
 }
 
 .slidecontainer {
-  width: 80%;
-  margin: 0 auto; 
-  color: white;
-  display: flex;
+  width: 70%;
+  color: $clr-white;
 }
 
 .slider {
-  -webkit-appearance: none;  /* Override default CSS styles */
+  -webkit-appearance: none; /* Override default CSS styles */
   appearance: none;
   width: 100%;
   height: 15px;
   background: $clr-bg-faded;
   outline: none;
   opacity: 0.7;
-  -webkit-transition: .2s; /* 0.2 seconds transition on hover */
-  transition: opacity .2s;
+  -webkit-transition: 0.2s; /* 0.2 seconds transition on hover */
+  transition: opacity 0.2s;
 }
 
 .slider:hover {
-  opacity: 1; 
+  opacity: 1;
 }
 
-/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */ 
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
 .slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
   width: 25px;
   height: 25px;
   border-radius: 50%;
-  background: $clr-accent1;
+  background: $clr-fav;
   cursor: pointer;
 }
 
@@ -213,13 +229,13 @@ h1 {
 }
 
 .strikethrough::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   left: 0;
   right: 0;
   height: 3px;
-  background-color: $clr-accent1;
+  background-color: $clr-fav;
   transform-origin: center right;
   transform: scaleX(0) translateY(-50%);
   transition: transform 0.3s ease;

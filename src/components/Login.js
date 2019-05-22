@@ -1,15 +1,15 @@
 import React, {useState} from 'react';
 import swal from 'sweetalert';
 import {connect} from 'react-redux';
-import {registerUser, loginUser, logoutUser, getUser} from '../ducks/userReducer';
+import {registerUser, loginUser, logoutUser, getUser, sendEmail} from '../ducks/userReducer';
 import {getFavorites} from '../ducks/favoritesReducer';
 import axios from 'axios'
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus } from '@fortawesome/free-solid-svg-icons';
+import { faBan } from '@fortawesome/free-solid-svg-icons';
 
 
-library.add(faMinus);
+library.add(faBan);
 
 
 function Login(props) {
@@ -111,8 +111,8 @@ function Login(props) {
                             setLogin(!login) : 
                             setRegister(!register)
                             setShowReset(false)
-                        }}}>
-                            <FontAwesomeIcon icon='minus' />
+                            }}}>
+                            <FontAwesomeIcon icon='ban' />
                     </button> 
                 </div>
             }
