@@ -1,1 +1,1 @@
-SELECT * FROM favorites where favorite_county_id = $1;
+SELECT * FROM favorites where favorite_county_id = $1 AND user_id = $2;
