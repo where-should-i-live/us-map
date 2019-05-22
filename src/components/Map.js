@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import ActiveCounty from "./ActiveCounty";
+import Instructions from "./Legend";
 import {
   getCountyData,
   standardDeviation,
@@ -13,10 +14,6 @@ import { addFavorite } from "./../ducks/favoritesReducer";
 import * as d3 from "d3";
 import * as topojson from "topojson-client";
 
-// import { library } from '@fortawesome/fontawesome-svg-core';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faQuestion } from '@fortawesome/free-solid-svg-icons';
-
 class Map extends Component {
   constructor(props) {
     super(props);
@@ -24,7 +21,7 @@ class Map extends Component {
     this.state = {
       allTheData: [],
       usGeoData: {},
-      tooltip: '',
+      tooltip: "",
       temp: true,
       temp_val: 36,
       hi: true,
@@ -136,7 +133,6 @@ class Map extends Component {
     const geoPath = d3.geoPath();
     const { allTheData } = this.state;
 
-
     svg
       .select("g")
       .selectAll("path")
@@ -149,8 +145,10 @@ class Map extends Component {
         mapContext.props.getActiveCounty(d.id);
       })
       .on("mouseover", function(d) {
-        mapContext.setState({tooltip: `${d.county_name}, ${d.county_state_name}`});
-      })
+        mapContext.setState({
+          tooltip: `${d.county_name}, ${d.county_state_name}`
+        });
+      });
   }
 
   async shadeCounties() {
@@ -163,11 +161,28 @@ class Map extends Component {
       .transition()
       .duration(1000)
       .attr("fill", function shader(d) {
-        const {hi, hi_val, temp, temp_val, pv, pv_val, age, age_val, c, c_val} = mapContext.state
-        const {household_income_stdev, avg_temp_stdev, property_value_stdev, median_age_stdev, commute_time_stdev} = mapContext.props.county.standardDeviation;
-        const {activeCounty} = mapContext.props.county;
+        const {
+          hi,
+          hi_val,
+          temp,
+          temp_val,
+          pv,
+          pv_val,
+          age,
+          age_val,
+          c,
+          c_val
+        } = mapContext.state;
+        const {
+          household_income_stdev,
+          avg_temp_stdev,
+          property_value_stdev,
+          median_age_stdev,
+          commute_time_stdev
+        } = mapContext.props.county.standardDeviation;
+        const { activeCounty } = mapContext.props.county;
 
-        const color8 = '#FEFFE0';
+        const color8 = "#FEFFE0";
         const color7 = "rgb(254,255,207)";
         const color6 = "rgb(202,233,181)";
         const color5 = "rgb(133,204,187)";
@@ -175,33 +190,6 @@ class Map extends Component {
         const color3 = "rgb(50,128,181)";
         const color2 = "#205274";
         const color1 = "#173B53";
-
-        // const color8 = '#fff7f3';
-        // const color7 = "#fde0dd";
-        // const color6 = "#fcc5c0";
-        // const color5 = "#fa9fb5";
-        // const color4 = "#f768a1";
-        // const color3 = "#dd3497";
-        // const color2 = "#ae017e";
-        // const color1 = "#7a0177";
-
-        // const color8 = '#fff7fb';
-        // const color7 = "#ece7f2";
-        // const color6 = "#d0d1e6";
-        // const color5 = "#a6bddb";
-        // const color4 = "#74a9cf";
-        // const color3 = "#3690c0";
-        // const color2 = "#0570b0";
-        // const color1 = "#034e7b";
-
-        // const color8 = '#fff7ec';
-        // const color7 = "#fee8c8";
-        // const color6 = "#fdd49e";
-        // const color5 = "#fdbb84";
-        // const color4 = "#fc8d59";
-        // const color3 = "#ef6548";
-        // const color2 = "#d7301f";
-        // const color1 = "#990000";
 
         let datasetArr = [
           {
@@ -294,7 +282,7 @@ class Map extends Component {
         calcWeight();
 
         if (activeCounty.county_id === Number(d.id)) {
-          return '#fc2f70';
+          return "#fc2f70";
         } else if (weight < 2) {
           return color1;
         } else if (weight < 3) {
@@ -318,14 +306,35 @@ class Map extends Component {
   }
 
   render() {
-    const {household_income_min, household_income_max, avg_temp_min, avg_temp_max, property_value_min, property_value_max, commute_time_min, commute_time_max, median_age_min, median_age_max} = this.props.county.standardDeviation;
-    const {hi, hi_val, temp, temp_val, pv, pv_val, c, c_val, age, age_val} = this.state;
+    const {
+      household_income_min,
+      household_income_max,
+      avg_temp_min,
+      avg_temp_max,
+      property_value_min,
+      property_value_max,
+      commute_time_min,
+      commute_time_max,
+      median_age_min,
+      median_age_max
+    } = this.props.county.standardDeviation;
+    const {
+      hi,
+      hi_val,
+      temp,
+      temp_val,
+      pv,
+      pv_val,
+      c,
+      c_val,
+      age,
+      age_val
+    } = this.state;
     return (
       <div className="map">
         <div className="info-section">
-          <div className='title-bar'>
+          <div className="title-bar">
             <h1>Adjust Sliders Below</h1>
-            {/* <button className='favorite' onClick={() => {}}><FontAwesomeIcon icon='question' /></button> */}
           </div>
           <div className="data-filters">
             <div
@@ -334,7 +343,8 @@ class Map extends Component {
                 !temp
                   ? {
                       background: "hsla(0, 0%, 100%, 0.2)",
-                      borderRadius: "5px"
+                      borderRadius: "5px",
+                      alignItems: "center"
                     }
                   : null
               }
@@ -349,14 +359,16 @@ class Map extends Component {
                 </p>
                 {temp ? (
                   <p className="active-val">
-                    {temp_val}<span>&#176;</span>F
+                    {temp_val}
+                    <span>&#176;</span>F
                   </p>
                 ) : null}
               </div>
               {temp ? (
                 <div className="slide-row">
                   <p className="datapoint text-right">
-                    {Math.round(avg_temp_min)}<span>&#176;</span>F
+                    {Math.round(avg_temp_min)}
+                    <span>&#176;</span>F
                   </p>
                   <div className="slidecontainer">
                     <input
@@ -367,12 +379,15 @@ class Map extends Component {
                       max={avg_temp_max}
                       value={temp_val}
                       onChange={e =>
-                        this.setState({ temp_val: Math.round(Number(e.target.value)) })
+                        this.setState({
+                          temp_val: Math.round(Number(e.target.value))
+                        })
                       }
                     />
                   </div>
                   <p className="datapoint text-left">
-                    {Math.floor(avg_temp_max)}<span>&#176;</span>F
+                    {Math.floor(avg_temp_max)}
+                    <span>&#176;</span>F
                   </p>
                 </div>
               ) : null}
@@ -383,6 +398,7 @@ class Map extends Component {
                 !hi
                   ? {
                       background: "hsla(0, 0%, 100%, 0.2)",
+                      alignItems: "center",
                       borderRadius: "5px"
                     }
                   : null
@@ -396,12 +412,16 @@ class Map extends Component {
                 >
                   <span className="label">Household Income</span>
                 </p>
-                {hi ? <p className="active-val">${Math.round(hi_val/1000)*1000}</p> : null}
+                {hi ? (
+                  <p className="active-val">
+                    ${Math.round(hi_val / 1000) * 1000}
+                  </p>
+                ) : null}
               </div>
               {hi ? (
                 <div className="slide-row">
                   <p className="datapoint text-right">
-                    ${Math.round(household_income_min/1000)*1000}
+                    ${Math.round(household_income_min / 1000) * 1000}
                   </p>
                   <div className="slidecontainer">
                     <input
@@ -416,7 +436,9 @@ class Map extends Component {
                       }
                     />
                   </div>
-                  <p className="datapoint text-left">${Math.round(household_income_max/1000)*1000}</p>
+                  <p className="datapoint text-left">
+                    ${Math.round(household_income_max / 1000) * 1000}
+                  </p>
                 </div>
               ) : null}
             </div>
@@ -426,7 +448,8 @@ class Map extends Component {
                 !pv
                   ? {
                       background: "hsla(0, 0%, 100%, 0.2)",
-                      borderRadius: "5px"
+                      borderRadius: "5px",
+                      alignItems: "center"
                     }
                   : null
               }
@@ -439,11 +462,17 @@ class Map extends Component {
                 >
                   <span className="label">Property Value</span>
                 </p>
-                {pv ? <p className="active-val">${Math.round(pv_val/1000)*1000}</p> : null}
+                {pv ? (
+                  <p className="active-val">
+                    ${Math.round(pv_val / 1000) * 1000}
+                  </p>
+                ) : null}
               </div>
               {pv ? (
                 <div className="slide-row">
-                  <p className="datapoint text-right">${Math.round(property_value_min/1000)*1000}</p>
+                  <p className="datapoint text-right">
+                    ${Math.round(property_value_min / 1000) * 1000}
+                  </p>
                   <div className="slidecontainer">
                     <input
                       type="range"
@@ -457,7 +486,9 @@ class Map extends Component {
                       }
                     />
                   </div>
-                  <p className="datapoint text-left">${Math.round(property_value_max/1000)*1000}</p>
+                  <p className="datapoint text-left">
+                    ${Math.round(property_value_max / 1000) * 1000}
+                  </p>
                 </div>
               ) : null}
             </div>
@@ -467,7 +498,8 @@ class Map extends Component {
                 !c
                   ? {
                       background: "hsla(0, 0%, 100%, 0.2)",
-                      borderRadius: "5px"
+                      borderRadius: "5px",
+                      alignItems: "center"
                     }
                   : null
               }
@@ -480,11 +512,15 @@ class Map extends Component {
                 >
                   <span className="label">Commute Time</span>
                 </p>
-                {c ? <p className="active-val">{Math.round(c_val)} minutes</p> : null}
+                {c ? (
+                  <p className="active-val">{Math.round(c_val)} minutes</p>
+                ) : null}
               </div>
               {c ? (
                 <div className="slide-row">
-                  <p className="datapoint text-right">{Math.round(commute_time_min)} min</p>
+                  <p className="datapoint text-right">
+                    {Math.round(commute_time_min)} min
+                  </p>
                   <div className="slidecontainer">
                     <input
                       type="range"
@@ -494,11 +530,15 @@ class Map extends Component {
                       max={commute_time_max}
                       value={c_val}
                       onChange={e =>
-                        this.setState({ c_val: Math.round(Number(e.target.value)) })
+                        this.setState({
+                          c_val: Math.round(Number(e.target.value))
+                        })
                       }
                     />
                   </div>
-                  <p className="datapoint text-left">{Math.floor(commute_time_max)} min</p>
+                  <p className="datapoint text-left">
+                    {Math.floor(commute_time_max)} min
+                  </p>
                 </div>
               ) : null}
             </div>
@@ -508,7 +548,8 @@ class Map extends Component {
                 !age
                   ? {
                       background: "hsla(0, 0%, 100%, 0.2)",
-                      borderRadius: "5px"
+                      borderRadius: "5px",
+                      alignItems: "center"
                     }
                   : null
               }
@@ -525,7 +566,9 @@ class Map extends Component {
               </div>
               {age ? (
                 <div className="slide-row">
-                  <p className="datapoint text-right">{Math.round(median_age_min)} yrs</p>
+                  <p className="datapoint text-right">
+                    {Math.round(median_age_min)} yrs
+                  </p>
                   <div className="slidecontainer">
                     <input
                       type="range"
@@ -535,15 +578,20 @@ class Map extends Component {
                       max={median_age_max}
                       value={age_val}
                       onChange={e =>
-                        this.setState({ age_val: Math.round(Number(e.target.value)) })
+                        this.setState({
+                          age_val: Math.round(Number(e.target.value))
+                        })
                       }
                     />
                   </div>
-                  <p className="datapoint text-left">{Math.round(median_age_max)} yrs</p>
+                  <p className="datapoint text-left">
+                    {Math.round(median_age_max)} yrs
+                  </p>
                 </div>
               ) : null}
             </div>
           </div>
+          <Instructions />
           <ActiveCounty />
         </div>
         <div className="map-container">
@@ -553,7 +601,7 @@ class Map extends Component {
             viewBox="0 0 960 600"
             ref={el => (this.mapEl = el)}
           />
-      </div>
+        </div>
       </div>
     );
   }

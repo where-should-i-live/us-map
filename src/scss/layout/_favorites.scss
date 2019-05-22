@@ -50,7 +50,7 @@
 
 .unfavorite {
   position: absolute;
-  top: 13px;
+  top: 7px;
   right: 10px;
   background: none;
   color: $clr-fav;
@@ -84,6 +84,7 @@
   line-height: 25px;
   padding: 2px 0px;
   resize: none;
+  overflow: auto;
   &:hover {
     cursor: pointer;
   }
