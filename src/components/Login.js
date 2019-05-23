@@ -11,6 +11,11 @@ import { faBan } from '@fortawesome/free-solid-svg-icons';
 
 library.add(faBan);
 
+// const componentDidMount = async (props) => {
+//     let user = await axios.get('/checkForUser')
+//     if(user.data) {props.getFavorites(user.data.user_id)}
+//     if(user.data) return
+//   }
 
 function Login(props) {
     const [user_name, setUserName] = useState('');
@@ -18,7 +23,6 @@ function Login(props) {
     const [password, setPassword] = useState('');
     const [login, setLogin] = useState(false);
     const [register, setRegister] = useState(false);
-    const [showReset, setShowReset] = useState(false);
     const [tempPass, setTempPass] = useState('')
     const [showPassReset, setShowPassReset] = useState(false)
 
@@ -46,12 +50,11 @@ function Login(props) {
         }
     }
 
-    function sendEmail(event) {
-        if(event.key === 'Enter') {
-            let randomStr = Math.random().toString(15).slice(-10)
-            setTempPass(randomStr)
-            axios.post('/reset', {user_email, randomStr})
-        }
+    function sendEmail() {
+        alert('A temporary passord has been sent to your email')
+        let randomStr = Math.random().toString(15).slice(-10)
+        setTempPass(randomStr)
+        axios.post('/reset', {user_email, randomStr})
     }
     
     function checkTempPass(event, value){
@@ -68,7 +71,6 @@ function Login(props) {
             if(user.data.user_id){
                 props.getFavorites(user.data.user_id);
                 setShowPassReset(false)
-                setShowReset(false)
                 setTempPass('')
                 setUserEmail('')
                 setPassword('')
@@ -114,7 +116,6 @@ function Login(props) {
                         {(login) ?
                             setLogin(!login) : 
                             setRegister(!register)
-                            setShowReset(false)
                             }}}>
                             <FontAwesomeIcon icon='ban' />
                     </button> 
@@ -129,22 +130,16 @@ function Login(props) {
                     flexDirection: 'column', 
                     alignItems: 'center'
                     }}>
-                <button onClick={() => setShowReset(!showReset)} style={{width: 108,border: 'none', background: 'none', color: 'red', }}>
+                <button onClick={() => sendEmail()} style={{width: 108,border: 'none', background: 'none', color: 'red', }}>
                     forgot password?
                 </button>
-                {showReset &&
-                    <div>
-                        <input type='text' placeholder='email' 
-                            style={{textAlign: 'center', marginTop: 10}}
-                            onChange={(e) => setUserEmail(e.target.value)} 
-                            onKeyPress={(e) => sendEmail(e)}/>
-                        {(tempPass !== '') &&
-                            <input style={{position: 'absolute', top: 26, right: 9, textAlign: 'center'}}
-                                placeholder='temperary password'
-                                onKeyPress={(e) => checkTempPass(e, e.target.value)}
-                            />
-                        }
-                    </div>
+
+                {(tempPass !== '') &&
+                    <input style={{position: 'absolute', top: 26, right: 9, textAlign: 'center'}}
+                        placeholder='temporary password'
+                        onKeyPress={(e) => checkTempPass(e, e.target.value)}
+                    />
+                
                 }
                 {showPassReset &&
                     <input placeholder='new password' 

@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import Login from "./components/Login";
 import Map from "./components/Map";
 import FavoritesBar from "./components/FavoritesBar";
+import { loginUser } from "./ducks/userReducer";
 
 function App(props) {
   return (
@@ -11,7 +12,7 @@ function App(props) {
       <Login />
       {/* <FilterBar /> */}
       <Map />
-      {props.user.user.isLoggedIn ? <FavoritesBar /> : null}
+      {props.user.user.isLoggedIn && <FavoritesBar /> }
     </div>
   );
 }
