@@ -330,7 +330,7 @@ class Map extends Component {
     return (
       <div className="map">
         <div className="info-section">
-          <div className="title-bar">
+          <div className="title-bar bufferHack">
             <h1>Adjust Sliders Below</h1>
           </div>
           <div className="data-filters">
