@@ -9,8 +9,7 @@ import {
 } from "./../ducks/countyReducer";
 import { addFavorite } from "./../ducks/favoritesReducer";
 
-// import ReactDOM from "react-dom";
-// ReactDOM.render(document.getElementById("app"));
+
 import * as d3 from "d3";
 import * as topojson from "topojson-client";
 
