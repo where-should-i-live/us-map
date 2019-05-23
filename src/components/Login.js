@@ -1,16 +1,15 @@
 import React, {useState} from 'react';
 import swal from 'sweetalert';
 import {connect} from 'react-redux';
-import {registerUser, loginUser, logoutUser, getUser, sendEmail} from '../ducks/userReducer';
+import {registerUser, loginUser, logoutUser, getUser} from '../ducks/userReducer';
 import {getFavorites} from '../ducks/favoritesReducer';
 import axios from 'axios'
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBan } from '@fortawesome/free-solid-svg-icons';
-
+import {testUserName, testEmailValidity, testPassword} from './../Logic/brittneyfunctions';
 
 library.add(faBan);
-
 
 function Login(props) {
     const [user_name, setUserName] = useState('');
@@ -22,10 +21,10 @@ function Login(props) {
     const [email, setEmail] = useState('');
     const [tempPass, setTempPass] = useState('')
     const [showPassReset, setShowPassReset] = useState(false)
-    // const [newPassword, setNewPassword] = useState('')
 
     const processUser = async (event) => {
         if (event.key === 'Enter' && login) {
+            console.log(login);
             const user = await props.loginUser({user_email, password});
             if (user.value.user_id) {
                 props.getFavorites(user.value.user_id);
@@ -36,6 +35,12 @@ function Login(props) {
             else swal({text: `${user.value.message}`, button: false, timer: 3000});
         }
         else if (event.key === 'Enter' && register) {
+            let name = await testUserName(user_name);
+            if (name !== 'Name accepted.') {return swal({text: `${name}`, button: false, timer: 3000});}
+            let email = await testEmailValidity(user_email);
+            if (!email.includes('@')) {return swal({text: `${email}`, button: false, timer: 3000});}
+            let pass = await testPassword(password);
+            if (pass !== 'Password accepted') {return swal({text: `${pass}`, button: false, timer: 3000});}
             const user = await props.registerUser({user_name, user_email, password});
             if (user.value.user_id) {
                 props.getFavorites(user.value.user_id);
