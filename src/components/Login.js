@@ -7,7 +7,7 @@ import axios from 'axios'
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBan } from '@fortawesome/free-solid-svg-icons';
-import {testUserName, testEmailValidity, testPassword} from './../Logic/brittneyfunctions';
+import {testUserName, testEmailValidity, testPassword} from './../Logic/functions';
 
 library.add(faBan);
 

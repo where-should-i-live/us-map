@@ -1,4 +1,4 @@
-let functions = require('./brittneyfunctions.js');
+let functions = require('./functions.js');
 
 describe('User name input should be defined and not empty.', () => {
     test('User name input should be defined', () => {
