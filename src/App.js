@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import Login from "./components/Login";
 import Map from "./components/Map";
 import FavoritesBar from "./components/FavoritesBar";
-import { loginUser } from "./ducks/userReducer";
 
 function App(props) {
   return (

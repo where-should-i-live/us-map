@@ -34,6 +34,7 @@ app.get('/auth/logout', authController.logoutUser);
 app.get('/user', authController.getUser);
 app.post('/reset', authController.sendEmail)
 app.post('/updatePassword', authController.updatePassword)
+app.post('/checkEmail', authController.checkEmail)
 
 // DATA CONTROLLER
 app.get('/data', dataController.getCountyData);

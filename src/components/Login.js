@@ -24,7 +24,7 @@ function Login(props) {
     const [login, setLogin] = useState(false);
     const [register, setRegister] = useState(false);
     const [tempPass, setTempPass] = useState('')
-    const [showPassReset, setShowPassReset] = useState(false)
+    const [showUpdateEmail, setShowUpdateEmail] = useState(false)
 
     const processUser = async (event) => {
         if (event.key === 'Enter' && login) {
@@ -51,26 +51,28 @@ function Login(props) {
     }
 
     function sendEmail() {
-        alert('A temporary passord has been sent to your email')
-        let randomStr = Math.random().toString(15).slice(-10)
-        setTempPass(randomStr)
-        axios.post('/reset', {user_email, randomStr})
+        const res = axios.post('/checkEmail', {user_email})
+        if(res.userEmail){
+            alert('A temporary passord has been sent to your email')
+            let randomStr = Math.random().toString(15).slice(-10)
+            setTempPass(randomStr)
+            axios.post('/reset', {user_email, randomStr})
+        }else{alert('Please enter valid email or Register')}
     }
     
     function checkTempPass(event, value){
         if(event.key === 'Enter' && value === tempPass) {
-            setShowPassReset(true)
+            setShowUpdateEmail(true)
         }
     }
 
     async function updatePassword(event, newPassword){
         if(event.key === 'Enter'){
             const user = await axios.post('/updatePassword', {newPassword, user_email})
-            console.log(user)
             await props.loginUser({user_email, password})
             if(user.data.user_id){
                 props.getFavorites(user.data.user_id);
-                setShowPassReset(false)
+                setShowUpdateEmail(false)
                 setTempPass('')
                 setUserEmail('')
                 setPassword('')
@@ -141,7 +143,7 @@ function Login(props) {
                     />
                 
                 }
-                {showPassReset &&
+                {showUpdateEmail &&
                     <input placeholder='new password' 
                         style={{position: 'absolute', textAlign: 'center', top: 26, right: 9}} 
                         onChange={(e) => setPassword(e.target.value)}

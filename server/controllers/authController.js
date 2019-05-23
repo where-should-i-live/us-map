@@ -11,6 +11,13 @@ let transporter = nodemailer.createTransport({
   })
 
 module.exports = {
+    checkEmail: async (req, res) => {
+        const db = req.app.get('db')
+        const { user_email } = req.body
+        const userEmail = db.get_user_by_email(user_email)
+        res.status(200).send(userEmail)
+    },
+
     registerUser: async (req, res) => {
         const db = req.app.get('db');
         const {user_name, user_email, password} = req.body;
