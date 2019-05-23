@@ -71,8 +71,8 @@ module.exports = {
             let mailOption = {
                 from: EMAIL,
                 to: email,
-                subject: 'temporary password',
-                text: `your temporary password is ${randomStr}`
+                subject: 'Temporary Password from US County Explorer',
+                text: `Your temporary password is ${randomStr}. Copy and paste this to the website and then enter your new password.`
             }
             transporter.sendMail(mailOption, function(err) {
                 if(err) {
