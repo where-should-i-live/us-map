@@ -1,13 +1,12 @@
 .map {
   width: 100%;
-  height: calc(100vh - 50px);
   background: $clr-bg;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .map-container {
-  height: 100%;
+  height: calc(100vh - 50px);
   width: 75%;
   padding-top: 10px;
   padding-bottom: 20px;
@@ -149,7 +148,11 @@
   align-items: center;
   padding-bottom: 5px;
   border-bottom: 1.5px solid $clr-fav;
-  margin-top: 25px;
+  margin-top: 15px;
+}
+
+.bufferHack {
+  margin-top: 18px;
 }
 
 h1 {
