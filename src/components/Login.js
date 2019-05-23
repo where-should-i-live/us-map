@@ -52,7 +52,6 @@ function Login(props) {
             else swal({text: `${user.value.message}`, button: false, timer: 3000});
         }
     }
-  };
 
   function sendEmail(event) {
     if (event.key === "Enter") {
