@@ -18,5 +18,10 @@ module.exports = {
         let countyArr = await db.get_active_county(id);
         let county = countyArr[0];
         res.status(200).send(county);
+    },
+
+    checkForSession: (req, res) => {
+        console.log(req.session)
+        res.status(200).send(req.session)
     }
 };

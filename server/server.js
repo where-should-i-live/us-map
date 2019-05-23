@@ -24,7 +24,10 @@ massive(CONNECTION_STRING).then(db => {
 app.use(session({
     secret: SESSION_SECRET,
     saveUninitialized: false,
-    resave: false
+    resave: false,
+    cookies: {
+        maxAge: 1000 * 60 * 30
+    }
 }));
 
 // AUTH CONTROLlER
@@ -40,6 +43,7 @@ app.post('/checkEmail', authController.checkEmail)
 app.get('/data', dataController.getCountyData);
 app.get('/data/calc', dataController.standardDeviation);
 app.get('/data/:id', dataController.getActiveCounty);
+app.get('/checkForSession', dataController.checkForSession)
 
 // FAVORTIES CONTROLLER
 app.get('/favorites/:id', favoritesController.getFavorites);

@@ -9,7 +9,6 @@ function App(props) {
   return (
     <div className="layout">
       <Login />
-      {/* <FilterBar /> */}
       <Map />
       {props.user.user.isLoggedIn && <FavoritesBar /> }
     </div>

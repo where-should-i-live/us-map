@@ -50,10 +50,10 @@ function Login(props) {
         }
     }
 
-    function sendEmail() {
-        const res = axios.post('/checkEmail', {user_email})
-        if(res.userEmail){
-            alert('A temporary passord has been sent to your email')
+    async function sendEmail(user_email) {
+        const res = await axios.post('/checkEmail', user_email)
+        if(res.data){
+            alert('A temporary password has been sent to your email')
             let randomStr = Math.random().toString(15).slice(-10)
             setTempPass(randomStr)
             axios.post('/reset', {user_email, randomStr})
