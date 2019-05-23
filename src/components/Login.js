@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import swal from 'sweetalert';
 import {connect} from 'react-redux';
-import {registerUser, loginUser, logoutUser, getUser, sendEmail} from '../ducks/userReducer';
+import {registerUser, loginUser, logoutUser, getUser} from '../ducks/userReducer';
 import {getFavorites} from '../ducks/favoritesReducer';
 import axios from 'axios'
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -19,10 +19,8 @@ function Login(props) {
     const [login, setLogin] = useState(false);
     const [register, setRegister] = useState(false);
     const [showReset, setShowReset] = useState(false);
-    const [email, setEmail] = useState('');
     const [tempPass, setTempPass] = useState('')
     const [showPassReset, setShowPassReset] = useState(false)
-    // const [newPassword, setNewPassword] = useState('')
 
     const processUser = async (event) => {
         if (event.key === 'Enter' && login) {
@@ -52,7 +50,7 @@ function Login(props) {
         if(event.key === 'Enter') {
             let randomStr = Math.random().toString(15).slice(-10)
             setTempPass(randomStr)
-            axios.post('/reset', {email, randomStr})
+            axios.post('/reset', {user_email, randomStr})
         }
     }
     
@@ -62,14 +60,20 @@ function Login(props) {
         }
     }
 
-    function updatePassword(event, value){
+    async function updatePassword(event, newPassword){
         if(event.key === 'Enter'){
-            axios.post('/updatePassword', {value, email}).then(() => {
-                setEmail('')
+            const user = await axios.post('/updatePassword', {newPassword, user_email})
+            console.log(user)
+            await props.loginUser({user_email, password})
+            if(user.data.user_id){
+                props.getFavorites(user.data.user_id);
                 setShowPassReset(false)
                 setShowReset(false)
                 setTempPass('')
-            })
+                setUserEmail('')
+                setPassword('')
+                setLogin(false)
+            }
         }
     }
 
@@ -132,7 +136,7 @@ function Login(props) {
                     <div>
                         <input type='text' placeholder='email' 
                             style={{textAlign: 'center', marginTop: 10}}
-                            onChange={(e) => setEmail(e.target.value)} 
+                            onChange={(e) => setUserEmail(e.target.value)} 
                             onKeyPress={(e) => sendEmail(e)}/>
                         {(tempPass !== '') &&
                             <input style={{position: 'absolute', top: 26, right: 9, textAlign: 'center'}}
@@ -145,6 +149,7 @@ function Login(props) {
                 {showPassReset &&
                     <input placeholder='new password' 
                         style={{position: 'absolute', textAlign: 'center', top: 26, right: 9}} 
+                        onChange={(e) => setPassword(e.target.value)}
                         onKeyPress={(e) => updatePassword(e, e.target.value)} 
                     />
                 }

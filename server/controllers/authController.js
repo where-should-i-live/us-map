@@ -63,14 +63,14 @@ module.exports = {
     },
 
     sendEmail: async (req, res) => {
-        const { email, randomStr } = req.body
+        const { user_email, randomStr } = req.body
         const db = await req.app.get('db')
-        const checkUser = await db.get_user_by_email(email)
+        const checkUser = await db.get_user_by_email(user_email)
         res.status(200).send('user found')
         if(checkUser[0]){
             let mailOption = {
                 from: EMAIL,
-                to: email,
+                to: user_email,
                 subject: 'temporary password',
                 text: `your temporary password is ${randomStr}`
             }
@@ -86,11 +86,14 @@ module.exports = {
 
     updatePassword: async (req, res) => {
         const db = req.app.get('db')
-        const { value, email } = req.body
+        const { newPassword, user_email } = req.body
         const salt = bcrypt.genSaltSync(10);
-        const hash = bcrypt.hashSync(value, salt);
-        await db.update_password(email, hash)
-        res.status(200).send('password has been updated')
+        const hash = bcrypt.hashSync(newPassword, salt);
+        const user = await db.update_password(user_email, hash)
+        req.session.user = user[0];
+        req.session.user.isLoggedIn = true;
+        delete req.session.user.user_hash;
+        res.status(200).send(req.session.user)
     }
     
 }
