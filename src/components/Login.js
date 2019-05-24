@@ -1,57 +1,75 @@
-import React, {useState} from 'react';
-import swal from 'sweetalert';
-import {connect} from 'react-redux';
-import {registerUser, loginUser, logoutUser, getUser} from '../ducks/userReducer';
-import {getFavorites} from '../ducks/favoritesReducer';
-import axios from 'axios'
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBan } from '@fortawesome/free-solid-svg-icons';
-import {testUserName, testEmailValidity, testPassword} from './../Logic/brittneyfunctions';
+import React, { useState } from "react";
+import swal from "sweetalert";
+import { connect } from "react-redux";
+import {
+  registerUser,
+  loginUser,
+  logoutUser,
+  getUser
+} from "../ducks/userReducer";
+import { getFavorites } from "../ducks/favoritesReducer";
+import axios from "axios";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBan } from "@fortawesome/free-solid-svg-icons";
+import {
+  testUserName,
+  testEmailValidity,
+  testPassword
+} from "./../Logic/brittneyfunctions";
 
 library.add(faBan);
 
 function Login(props) {
-    const [user_name, setUserName] = useState('');
-    const [user_email, setUserEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [login, setLogin] = useState(false);
-    const [register, setRegister] = useState(false);
-    const [showReset, setShowReset] = useState(false);
-    const [email, setEmail] = useState('');
-    const [tempPass, setTempPass] = useState('')
-    const [showPassReset, setShowPassReset] = useState(false)
+  const [user_name, setUserName] = useState("");
+  const [user_email, setUserEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [login, setLogin] = useState(false);
+  const [register, setRegister] = useState(false);
+  const [showReset, setShowReset] = useState(false);
+  const [email, setEmail] = useState("");
+  const [tempPass, setTempPass] = useState("");
+  const [showPassReset, setShowPassReset] = useState(false);
 
-    const processUser = async (event) => {
-        if (event.key === 'Enter' && login) {
-            console.log(login);
-            const user = await props.loginUser({user_email, password});
-            if (user.value.user_id) {
-                props.getFavorites(user.value.user_id);
-                setUserEmail('');
-                setPassword('');
-                setLogin(false);
-            }
-            else swal({text: `${user.value.message}`, button: false, timer: 3000});
-        }
-        else if (event.key === 'Enter' && register) {
-            let name = await testUserName(user_name);
-            if (name !== 'Name accepted.') {return swal({text: `${name}`, button: false, timer: 3000});}
-            let email = await testEmailValidity(user_email);
-            if (!email.includes('@')) {return swal({text: `${email}`, button: false, timer: 3000});}
-            let pass = await testPassword(password);
-            if (pass !== 'Password accepted') {return swal({text: `${pass}`, button: false, timer: 3000});}
-            const user = await props.registerUser({user_name, user_email, password});
-            if (user.value.user_id) {
-                props.getFavorites(user.value.user_id);
-                setUserName('');
-                setUserEmail('');
-                setPassword('');
-                setRegister(false);
-            }
-            else swal({text: `${user.value.message}`, button: false, timer: 3000});
-        }
+  const processUser = async event => {
+    if (event.key === "Enter" && login) {
+      console.log(login);
+      const user = await props.loginUser({ user_email, password });
+      if (user.value.user_id) {
+        props.getFavorites(user.value.user_id);
+        setUserEmail("");
+        setPassword("");
+        setLogin(false);
+      } else
+        swal({ text: `${user.value.message}`, button: false, timer: 3000 });
+    } else if (event.key === "Enter" && register) {
+      let name = await testUserName(user_name);
+      if (name !== "Name accepted.") {
+        return swal({ text: `${name}`, button: false, timer: 3000 });
+      }
+      let email = await testEmailValidity(user_email);
+      if (!email.includes("@")) {
+        return swal({ text: `${email}`, button: false, timer: 3000 });
+      }
+      let pass = await testPassword(password);
+      if (pass !== "Password accepted") {
+        return swal({ text: `${pass}`, button: false, timer: 3000 });
+      }
+      const user = await props.registerUser({
+        user_name,
+        user_email,
+        password
+      });
+      if (user.value.user_id) {
+        props.getFavorites(user.value.user_id);
+        setUserName("");
+        setUserEmail("");
+        setPassword("");
+        setRegister(false);
+      } else
+        swal({ text: `${user.value.message}`, button: false, timer: 3000 });
     }
+  };
 
   function sendEmail(event) {
     if (event.key === "Enter") {
@@ -169,7 +187,7 @@ function Login(props) {
             forgot password?
           </button>
           {showReset && (
-            <div className="text-input">
+            <div className="text-input new-email">
               <input
                 className="input-box"
                 type="text"
@@ -182,10 +200,10 @@ function Login(props) {
               <span className="top" />
               <span className="left" />
               {tempPass !== "" && (
-                <div className="text-input">
+                <div className="text-input temp-pass">
                   <input
                     className="input-box"
-                    placeholder="temperary password"
+                    placeholder="temporary password"
                     onKeyPress={e => checkTempPass(e, e.target.value)}
                   />
                   <span className="bottom" />
@@ -197,16 +215,17 @@ function Login(props) {
             </div>
           )}
           {showPassReset && (
-            <input
-              placeholder="new password"
-              style={{
-                position: "absolute",
-                textAlign: "center",
-                top: 26,
-                right: 9
-              }}
-              onKeyPress={e => updatePassword(e, e.target.value)}
-            />
+            <div className="text-input">
+              <input
+                className="input-box new-pass"
+                placeholder="new password"
+                onKeyPress={e => updatePassword(e, e.target.value)}
+              />
+              <span className="bottom" />
+              <span className="right" />
+              <span className="top" />
+              <span className="left" />
+            </div>
           )}
         </div>
       )}
