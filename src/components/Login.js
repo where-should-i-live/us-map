@@ -1,22 +1,13 @@
-import React, { useState } from "react";
-import swal from "sweetalert";
-import { connect } from "react-redux";
-import {
-  registerUser,
-  loginUser,
-  logoutUser,
-  getUser
-} from "../ducks/userReducer";
-import { getFavorites } from "../ducks/favoritesReducer";
-import axios from "axios";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBan } from "@fortawesome/free-solid-svg-icons";
-import {
-  testUserName,
-  testEmailValidity,
-  testPassword
-} from "./../Logic/brittneyfunctions";
+import React, {useState} from 'react';
+import swal from 'sweetalert';
+import {connect} from 'react-redux';
+import {registerUser, loginUser, logoutUser, getUser} from '../ducks/userReducer';
+import {getFavorites} from '../ducks/favoritesReducer';
+import axios from 'axios'
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBan } from '@fortawesome/free-solid-svg-icons';
+import {testUserName, testEmailValidity, testPassword} from './../Logic/functions';
 
 library.add(faBan);
 
